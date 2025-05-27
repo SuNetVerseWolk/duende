@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+@theme {
+    --color-text: #fff;
+    --color-black: #000;
+    --color-lightBlack: #212020;
+    --color-whiteBlack: #525252;
+
+    --shadow-box: #ffffff58 0 7px 50px;
+}
+
+* {
+    outline: none;
+}
+
+html,
+body {
+    height: 100vh;
+    background: linear-gradient(to right, #000000, #1f2834, #000000);
+}
+button {
+    cursor: pointer;
+}
+h1 {font-size: 32px ;}
+h2 {font-size: 20px ;}
+
+@layer utilities {
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .shine {
+        position: relative;
+    }
+    .shine::before {
+        content: "";
+
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        width: 100%;
+        transform: scale(0);
+        height: 100%;
+        border-radius: 4px;
+        background: linear-gradient(to right, rgba(255, 255, 255, 0.232), rgba(255, 255, 255, 0));
+        
+        transition: all 0.5s ease-in;
+    }
+
+    .shine:hover::before {
+        transform: scale(1);
+    }
+}
