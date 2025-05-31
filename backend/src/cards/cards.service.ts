@@ -11,7 +11,7 @@ export class CardsService {
       await this.verifySetOwnership(createCardDto.id_set, userId);
     }
 
-    return this.prisma.card.create({
+    return this.prisma.cards.create({
       data: {
         text: createCardDto.text,
         translation: createCardDto.translation,
@@ -34,7 +34,7 @@ export class CardsService {
       where.Sets = { privacy: false };
     }
 
-    return this.prisma.card.findMany({
+    return this.prisma.cards.findMany({
       where,
       include: {
         Sets: {
@@ -49,7 +49,7 @@ export class CardsService {
   }
 
   async findOne(id: bigint, userId?: string) {
-    const card = await this.prisma.card.findUnique({
+    const card = await this.prisma.cards.findUnique({
       where: { id },
       include: {
         Sets: {
@@ -80,7 +80,7 @@ export class CardsService {
       throw new ForbiddenException('You can only update cards in your own sets');
     }
 
-    return this.prisma.card.update({
+    return this.prisma.cards.update({
       where: { id },
       data: updateCardDto,
     });
@@ -93,7 +93,7 @@ export class CardsService {
       throw new ForbiddenException('You can only delete cards in your own sets');
     }
 
-    return this.prisma.card.delete({
+    return this.prisma.cards.delete({
       where: { id },
     });
   }

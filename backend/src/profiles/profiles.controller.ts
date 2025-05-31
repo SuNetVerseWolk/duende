@@ -3,7 +3,6 @@ import {
   Get,
   Patch,
   Body,
-  UseGuards,
   Param,
   Req,
 } from '@nestjs/common';
@@ -29,14 +28,9 @@ export class ProfilesController {
     return this.profilesService.getUserSets(req.user.id, true);
   }
 
-  @Get(':username')
-  getByUsername(@Param('username') username: string) {
-    return this.profilesService.findByUsername(username);
-  }
-
-  @Get(':username/sets')
-  getUserSets(@Param('username') username: string) {
-    return this.profilesService.findByUsername(username).then(profile => 
+  @Get(':id/sets')
+  getUserSets(@Param('userId') userId: string) {
+    return this.profilesService.findById(userId).then(profile => 
       this.profilesService.getUserSets(profile.id)
     );
   }

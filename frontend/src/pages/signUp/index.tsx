@@ -32,6 +32,7 @@ export default function index() {
 				password: formData.password,
 			});
 
+			console.log(data)
 			if (error) {
 				console.error(error);
 			} else {

@@ -1,10 +1,23 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
 import { profiles } from 'generated/prisma';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class ProfilesService {
   constructor(private prisma: PrismaService) {}
+
+  async getAllProfiles() {
+		return this.prisma.profiles.findMany({
+			orderBy: {
+				name: 'asc', // or 'desc' for descending
+			},
+			include: {
+				_count: {
+					select: { Sets: true },
+				},
+			},
+		});
+	}
 
   async findById(id: string) {
     const profile = await this.prisma.profiles.findUnique({
@@ -12,35 +25,6 @@ export class ProfilesService {
       include: {
         _count: {
           select: { Sets: true },
-        },
-      },
-    });
-
-    if (!profile) {
-      throw new NotFoundException('Profile not found');
-    }
-
-    return profile;
-  }
-
-  async findByUsername(username: string) {
-    const profile = await this.prisma.profiles.findUnique({
-      where: { username },
-      include: {
-        _count: {
-          select: { Sets: true },
-        },
-        Sets: {
-          where: { privacy: false },
-          select: {
-            id: true,
-            name: true,
-            description: true,
-            created_at: true,
-            _count: {
-              select: { Cards: true },
-            },
-          },
         },
       },
     });
