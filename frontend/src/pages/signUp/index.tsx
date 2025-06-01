@@ -30,9 +30,11 @@ export default function index() {
 			const { error, data } = await supabase.auth.signUp({
 				email: formData.email,
 				password: formData.password,
+				options: {
+					emailRedirectTo: "/confirm"
+				}
 			});
 
-			console.log(data)
 			if (error) {
 				console.error(error);
 			} else {
