@@ -14,17 +14,17 @@ export class ProfilesController {
   constructor(private readonly profilesService: ProfilesService) {}
 
   @Get('me/:id')
-  getMyProfile(@Param() id) {
+  getMyProfile(@Param('id') id) {
     return this.profilesService.findById(id);
   }
 
   @Patch('me/:id')
-  updateMyProfile(@Param() id, @Body() updateProfileDto: profiles) {
+  updateMyProfile(@Param('id') id, @Body() updateProfileDto: profiles) {
     return this.profilesService.update(id, updateProfileDto);
   }
 
   @Get('me/:id/sets')
-  getMySets(@Param() id) {
+  getMySets(@Param('id') id) {
     return this.profilesService.getUserSets(id, true);
   }
 
