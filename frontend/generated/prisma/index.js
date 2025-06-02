@@ -400,7 +400,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\kiril\\VS work\\VSC\\Next\\Duende\\my-app\\generated\\prisma",
+      "value": "C:\\Users\\user\\Documents\\GitHub\\duende\\frontend\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -420,12 +420,11 @@ const config = {
     "previewFeatures": [
       "multiSchema"
     ],
-    "sourceFilePath": "C:\\Users\\kiril\\VS work\\VSC\\Next\\Duende\\my-app\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\user\\Documents\\GitHub\\duende\\frontend\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../.env",
-    "schemaEnvPath": "../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../../prisma",
   "clientVersion": "6.5.0",

@@ -19,23 +19,23 @@ import { Sets } from 'generated/prisma';
 export class SetsController {
   constructor(private readonly setsService: SetsService) {}
 
-  @Post()
-  async create(@Body() createSetDto: Sets, @Req() req) {
-    return this.setsService.create(createSetDto, req.user.id);
+  @Post(':userId')
+  async create(@Param('userId') userId: string, @Body() createSetDto: Sets) {
+    return this.setsService.create(createSetDto, userId);
   }
 
-  @Get()
-  async findAll(@Req() req?: any) {
-    return this.setsService.findAll(req?.user?.id);
+  @Get(':userId')
+  async findAllByUser(@Param('userId') userId: string) {
+    return this.setsService.findAll(userId);
   }
 
-  @Get(':id')
+  @Get(':userId/:id')
   async findOne(
     @Param('id', ParseIntPipe) id: bigint,
-    @Req() req?: any,
+		@Param('userId') userId: string
   ) {
     try {
-      return await this.setsService.findOne(id, req?.user?.id);
+      return await this.setsService.findOne(id, userId);
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw new NotFoundException('Set not found');
@@ -47,14 +47,14 @@ export class SetsController {
     }
   }
 
-  @Patch(':id')
+  @Patch(':userId/:id')
   async update(
     @Param('id', ParseIntPipe) id: bigint,
-    @Body() updateSetDto: Sets,
-    @Req() req,
+    @Param('userId') userId: string,
+    @Body() updateSetDto: Sets
   ) {
     try {
-      return await this.setsService.update(id, updateSetDto, req.user.id);
+      return await this.setsService.update(id, updateSetDto, userId);
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw new NotFoundException('Set not found');
@@ -66,13 +66,13 @@ export class SetsController {
     }
   }
 
-  @Delete(':id')
+  @Delete(':userId/:id')
   async remove(
     @Param('id', ParseIntPipe) id: bigint,
-    @Req() req,
+    @Param('userId') userId: string
   ) {
     try {
-      return await this.setsService.remove(id, req.user.id);
+      return await this.setsService.remove(id, userId);
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw new NotFoundException('Set not found');

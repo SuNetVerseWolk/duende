@@ -6,57 +6,57 @@ import MySetsContainer from "@/components/MySetsContainer";
 import PopUpAddingSets from "@/components/PopUpAddiningSets";
 import { useState } from "react";
 
-interface CardData {
-  id: number;
-  name: string;
-  amount: string;
-  owner: string;
-}
+//interface CardData {
+//  id: number;
+//  name: string;
+//  amount: string;
+//  owner: string;
+//}
 
-const cards: CardData[] = [
-  {
-    id: 1,
-    name: "Fitness",
-    amount: "2",
-    owner: "ME"
-  },
-  {
-    id: 2,
-    name: "Fitness",
-    amount: "2",
-    owner: "ME"
-  },
-  {
-    id: 3,
-    name: "Fitness",
-    amount: "2",
-    owner: "ME"
-  },
-  {
-    id: 4,
-    name: "Fitness",
-    amount: "2",
-    owner: "ME"
-  },
-  {
-    id: 5,
-    name: "Fitness",
-    amount: "2",
-    owner: "ME"
-  },
-  {
-    id: 6,
-    name: "Fitness",
-    amount: "2",
-    owner: "ME"
-  },
-  {
-    id: 7,
-    name: "Fitness",
-    amount: "2",
-    owner: "ME"
-  }
-];
+//const cards: CardData[] = [
+//  {
+//    id: 1,
+//    name: "Fitness",
+//    amount: "2",
+//    owner: "ME"
+//  },
+//  {
+//    id: 2,
+//    name: "Fitness",
+//    amount: "2",
+//    owner: "ME"
+//  },
+//  {
+//    id: 3,
+//    name: "Fitness",
+//    amount: "2",
+//    owner: "ME"
+//  },
+//  {
+//    id: 4,
+//    name: "Fitness",
+//    amount: "2",
+//    owner: "ME"
+//  },
+//  {
+//    id: 5,
+//    name: "Fitness",
+//    amount: "2",
+//    owner: "ME"
+//  },
+//  {
+//    id: 6,
+//    name: "Fitness",
+//    amount: "2",
+//    owner: "ME"
+//  },
+//  {
+//    id: 7,
+//    name: "Fitness",
+//    amount: "2",
+//    owner: "ME"
+//  }
+//];
 
 export default function Home() {
   // const dbPassword = "Supabase1987#";
@@ -72,7 +72,7 @@ export default function Home() {
           </div>
 
           {isMySets ? (
-            <MySetsContainer cards={cards} />
+            <MySetsContainer />
           ): (
             <GlobalSetsContainer/>
           )}

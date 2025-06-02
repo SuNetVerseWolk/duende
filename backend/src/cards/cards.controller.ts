@@ -16,35 +16,35 @@ import { Cards } from 'generated/prisma';
 export class CardsController {
   constructor(private readonly cardsService: CardsService) {}
 
-  @Post()
-  create(@Body() createCardDto: Cards, @Req() req) {
-    return this.cardsService.create(createCardDto, req.user.id);
+  @Post(':userId')
+  create(@Param('userId') userId: string, @Body() createCardDto: Cards) {
+    return this.cardsService.create(createCardDto, userId);
   }
 
-  @Get('set/:setId')
+  @Get('set/:setId/by/:userId')
   findAllForSet(
     @Param('setId', ParseIntPipe) setId: bigint,
-    @Req() req?,
+    @Param('userId') userId: string
   ) {
-    return this.cardsService.findAllForSet(setId, req?.user?.id);
+    return this.cardsService.findAllForSet(setId, userId);
   }
 
-  @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: bigint, @Req() req?) {
-    return this.cardsService.findOne(id, req?.user?.id);
+  @Get(':id/by/:userId')
+  findOne(@Param('id', ParseIntPipe) id: bigint, @Param('userId') userId: string) {
+    return this.cardsService.findOne(id, userId);
   }
 
-  @Patch(':id')
+  @Patch(':id/by/:userId')
   update(
     @Param('id', ParseIntPipe) id: bigint,
-    @Body() updateCardDto: Cards,
-    @Req() req,
+    @Param('userId') userId: string,
+    @Body() updateCardDto: Cards
   ) {
-    return this.cardsService.update(id, updateCardDto, req.user.id);
+    return this.cardsService.update(id, updateCardDto, userId);
   }
 
-  @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: bigint, @Req() req) {
-    return this.cardsService.remove(id, req.user.id);
+  @Delete(':id/by/:userId')
+  remove(@Param('id', ParseIntPipe) id: bigint, @Param('userId') userId: string) {
+    return this.cardsService.remove(id, userId);
   }
 }
