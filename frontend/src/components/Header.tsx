@@ -1,11 +1,10 @@
 "use client";
-import { useProfile, useUser } from "@/hooks/useAuth";
+import { useUser } from "@/hooks/useAuth";
 import Link from "next/link";
 import React from "react";
 
 const Header = () => {
-	const { data: user } = useUser();
-	const { data: profile, isLoading } = useProfile(user?.id as string);
+  const { data: user, isLoading: userIsLoading } = useUser();
 
   return (
     <header className="flex justify-center items-center pt-10">
@@ -30,7 +29,7 @@ const Header = () => {
                        hover:bg-blue-700 transition-colors duration-300 shadow-md
                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ml-15 px-15 py-2 rounded-sm"
         >
-          {profile ? "Выход" : "Вход"}
+          {userIsLoading ? "подождите..." : user ? "Выход" : "Вход"}
         </Link>
       </div>
     </header>
