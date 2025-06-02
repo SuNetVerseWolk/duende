@@ -1,48 +1,51 @@
-// src/hooks/useAuth.ts
+import { profileApi } from '@/lib/api';
+import { supabase } from '@/lib/supabaseClient';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { profileApi } from '../lib/api';
 
-export const useProfile = () => {
+export const useProfile = (id: string) => {
   return useQuery({
-    queryKey: ['profile'],
-    queryFn: profileApi.getMyProfile,
+    queryKey: ['profile', id],
+    queryFn: () => profileApi.getMyProfile(id).then(res => res.data),
+    enabled: !!id,
   });
 };
 
-export const useUpdateProfile = () => {
+export const useUpdateProfile = (id: string) => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: profileApi.updateMyProfile,
-    onSuccess: (updatedProfile) => {
-      queryClient.setQueryData(['profile'], updatedProfile);
+    mutationFn: (updateProfileDto: any) => profileApi.updateMyProfile(id, updateProfileDto),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['profile', id] });
     },
   });
 };
 
-export const useUserSets = (userId?: string) => {
+export const useMySets = (id: string) => {
   return useQuery({
-    queryKey: ['userSets', userId],
-    queryFn: () => userId ? profileApi.getUserSets(userId) : profileApi.getMySets(),
-    enabled: !!userId || true, // if no userId provided, fetch current user's sets
+    queryKey: ['mySets', id],
+    queryFn: () => profileApi.getMySets(id).then(res => res.data),
+    enabled: !!id,
   });
 };
 
-// Example of how to use these hooks in a component:
-/*
-function ProfileComponent() {
-  const { data: profile, isLoading } = useProfile();
-  const { mutate: updateProfile } = useUpdateProfile();
-  
-  if (isLoading) return <div>Loading...</div>;
-  
-  return (
-    <div>
-      <h1>{profile?.name}</h1>
-      <button onClick={() => updateProfile({ name: 'New Name' })}>
-        Update Name
-      </button>
-    </div>
-  );
-}
-*/
+export const useUserSets = (userId: string) => {
+  return useQuery({
+    queryKey: ['userSets', userId],
+    queryFn: () => profileApi.getUserSets(userId).then(res => res.data),
+    enabled: !!userId,
+  });
+};
+
+const fetchUser = async () => {
+  const { data: { user }, error } = await supabase.auth.getUser();
+  if (error) throw new Error(error.message);
+  return user;
+};
+
+export const useUser = () => {
+  return useQuery({ 
+    queryKey: ["user"], 
+    queryFn: fetchUser 
+  });
+};

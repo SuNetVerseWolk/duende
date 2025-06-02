@@ -1,10 +1,11 @@
 "use client";
-import { useProfile } from "@/hooks/useAuth";
+import { useProfile, useUser } from "@/hooks/useAuth";
 import Link from "next/link";
 import React from "react";
 
 const Header = () => {
-	const { data: profile, isLoading } = useProfile();
+	const { data: user } = useUser();
+	const { data: profile, isLoading } = useProfile(user?.id as string);
 
   return (
     <header className="flex justify-center items-center pt-10">

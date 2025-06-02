@@ -13,19 +13,19 @@ import { profiles } from 'generated/prisma';
 export class ProfilesController {
   constructor(private readonly profilesService: ProfilesService) {}
 
-  @Get('me')
-  getMyProfile(@Req() req) {
-    return this.profilesService.findById(req.user.id);
+  @Get('me/:id')
+  getMyProfile(@Param() id) {
+    return this.profilesService.findById(id);
   }
 
-  @Patch('me')
-  updateMyProfile(@Req() req, @Body() updateProfileDto: profiles) {
-    return this.profilesService.update(req.user.id, updateProfileDto);
+  @Patch('me/:id')
+  updateMyProfile(@Param() id, @Body() updateProfileDto: profiles) {
+    return this.profilesService.update(id, updateProfileDto);
   }
 
-  @Get('me/sets')
-  getMySets(@Req() req) {
-    return this.profilesService.getUserSets(req.user.id, true);
+  @Get('me/:id/sets')
+  getMySets(@Param() id) {
+    return this.profilesService.getUserSets(id, true);
   }
 
   @Get(':id/sets')
