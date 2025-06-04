@@ -35,14 +35,45 @@ export class SetsService {
       where.privacy = false;
     }
 
-    return this.prisma.sets.findMany({
+    const sets = await this.prisma.sets.findMany({
       where,
       include: {
         _count: {
           select: { Cards: true },
         },
+        profiles: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+      orderBy: {
+        profiles: {
+          name: 'asc',
+        },
       },
     });
+
+    // Group sets by profile name
+    const groupedResult = sets.reduce((acc, set) => {
+      const profileName = set.profiles?.name;
+      if (profileName && !acc[profileName]) {
+        acc[profileName] = {
+          profileId: set.profiles?.id,
+          profileName: profileName,
+          sets: [],
+        };
+      }
+      acc[profileName!].sets.push({
+        ...set,
+        cardsCount: set._count.Cards,
+      });
+      return acc;
+    }, {});
+
+    // Convert to array format if preferred
+    return Object.values(groupedResult);
   }
 
   async findOne(id: bigint, userId?: string) {

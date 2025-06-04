@@ -8,6 +8,17 @@ const api = axios.create({
   withCredentials: true,
 });
 
+export type SetWithCount = Sets & {
+  _count: { Cards: number };
+  Profile: { name: string };
+};
+
+export type GroupedSetsResponse = Array<{
+  profileId: string;
+  profileName: string;
+  sets: Array<Sets & { cardsCount: number }>;
+}>;
+
 export const profileApi = {
   getMyProfile: (id: string) => api.get<profiles>(`/profiles/me/${id}`),
   updateMyProfile: (id: string, updateProfileDto: any) =>
@@ -17,26 +28,32 @@ export const profileApi = {
 };
 
 export const setsApi = {
-  create: (userId: string, createSetDto: Sets) => api.post(`/sets/${userId}`, createSetDto),
-  findAll: () => api.get<Sets[]>("/sets"),
-  findOne: (userId: string, id: bigint) => api.get<Sets>(`/sets/${userId}/${id}`),
-  update: (userId: string, id: bigint, updateSetDto: Sets) =>
-    api.patch(`/sets/${userId}/${id}`, updateSetDto),
-  remove: (userId: string, id: bigint) => api.delete(`/sets/${userId}/${id}`),
-  findByUser: (userId: string, includePrivate?: boolean) =>
-    api.get<Sets[]>(`/sets/user/${userId}`, { params: { includePrivate } }),
+  create: (createSetDto: Omit<Sets, "id" | "id_profile">, userId: string) =>
+    api.post<Sets>(`/sets`, { ...createSetDto, userId }),
+  findAll: (userId?: string) =>
+    api.get<GroupedSetsResponse>(`/sets`, { params: { userId } }),
+  findOne: (id: bigint, userId?: string) =>
+    api.get<SetWithCount>(`/sets/${id}`, { params: { userId } }),
+  update: (id: bigint, updateSetDto: Partial<Sets>, userId: string) =>
+    api.patch<Sets>(`/sets/${id}`, updateSetDto, { params: { userId } }),
+  remove: (id: bigint, userId: string) =>
+    api.delete<void>(`/sets/${id}`, { params: { userId } }),
+  findByUser: (profileId: string, includePrivate: boolean = false) =>
+    api.get<SetWithCount[]>(`/sets/user/${profileId}`, {
+      params: { includePrivate },
+    }),
 };
 
 export const cardsApi = {
-  create: (userId: string, createCardDto: any) => 
+  create: (userId: string, createCardDto: any) =>
     api.post(`/cards/${userId}`, createCardDto),
-  findAllForSet: (setId: bigint, userId: string) => 
+  findAllForSet: (setId: bigint, userId: string) =>
     api.get<Cards[]>(`/cards/set/${setId}/by/${userId}`),
-  findOne: (id: bigint, userId: string) => 
+  findOne: (id: bigint, userId: string) =>
     api.get<Cards>(`/cards/${id}/by/${userId}`),
-  update: (id: bigint, userId: string, updateCardDto: any) => 
+  update: (id: bigint, userId: string, updateCardDto: any) =>
     api.patch(`/cards/${id}/by/${userId}`, updateCardDto),
-  remove: (id: bigint, userId: string) => 
+  remove: (id: bigint, userId: string) =>
     api.delete(`/cards/${id}/by/${userId}`),
 };
 

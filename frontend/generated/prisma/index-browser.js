@@ -329,10 +329,8 @@ exports.Prisma.SetsScalarFieldEnum = {
 exports.Prisma.ProfilesScalarFieldEnum = {
   id: 'id',
   updated_at: 'updated_at',
-  username: 'username',
-  full_name: 'full_name',
   avatar: 'avatar',
-  website: 'website'
+  name: 'name'
 };
 
 exports.Prisma.SortOrder = {
