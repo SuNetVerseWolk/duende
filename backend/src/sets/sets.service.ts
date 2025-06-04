@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Sets } from 'generated/prisma';
 
@@ -7,7 +11,7 @@ export class SetsService {
   constructor(private prisma: PrismaService) {}
 
   async create(createSetDto: Sets, userId: string) {
-    return this.prisma.sets.create({
+    const set = await this.prisma.sets.create({
       data: {
         name: createSetDto.name,
         description: createSetDto.description,
@@ -15,16 +19,18 @@ export class SetsService {
         id_profile: userId,
       },
     });
+
+    return {
+      ...set,
+      id: set.id.toString(), // Convert BigInt to string
+    };
   }
 
   async findAll(userId?: string) {
     const where: any = {};
-    
+
     if (userId) {
-      where.OR = [
-        { privacy: false },
-        { id_profile: userId },
-      ];
+      where.OR = [{ privacy: false }, { id_profile: userId }];
     } else {
       where.privacy = false;
     }
@@ -62,7 +68,7 @@ export class SetsService {
 
   async update(id: bigint, updateSetDto: Sets, userId: string) {
     const set = await this.verifyOwnership(id, userId);
-    
+
     return this.prisma.sets.update({
       where: { id },
       data: updateSetDto,
@@ -71,7 +77,7 @@ export class SetsService {
 
   async remove(id: bigint, userId: string) {
     await this.verifyOwnership(id, userId);
-    
+
     return this.prisma.sets.delete({
       where: { id },
     });

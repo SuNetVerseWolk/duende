@@ -17,10 +17,10 @@ export const profileApi = {
 };
 
 export const setsApi = {
-  create: (userId: string, createSetDto: any) => api.post(`/sets/${userId}`, createSetDto),
+  create: (userId: string, createSetDto: Sets) => api.post(`/sets/${userId}`, createSetDto),
   findAll: () => api.get<Sets[]>("/sets"),
   findOne: (userId: string, id: bigint) => api.get<Sets>(`/sets/${userId}/${id}`),
-  update: (userId: string, id: bigint, updateSetDto: any) =>
+  update: (userId: string, id: bigint, updateSetDto: Sets) =>
     api.patch(`/sets/${userId}/${id}`, updateSetDto),
   remove: (userId: string, id: bigint) => api.delete(`/sets/${userId}/${id}`),
   findByUser: (userId: string, includePrivate?: boolean) =>
