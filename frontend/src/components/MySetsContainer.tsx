@@ -8,7 +8,6 @@ import { useMySets } from "@/hooks/useAuth";
 export default function MySetsContainer() {
   const [openPopUpAdding, setOpenPopUpAdding] = useState(false);
   const { data: mySets, isLoading, isError, error, refetch } = useMySets();
-	console.log(mySets)
 
   return (
     <div

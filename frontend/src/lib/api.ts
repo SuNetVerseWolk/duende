@@ -16,14 +16,14 @@ export type SetWithCount = Sets & {
 export type GroupedSetsResponse = Array<{
   profileId: string;
   profileName: string;
-  sets: Array<Sets & { cardsCount: number }>;
+  sets: Array<SetWithCount>;
 }>;
 
 export const profileApi = {
   getMyProfile: (id: string) => api.get<profiles>(`/profiles/me/${id}`),
   updateMyProfile: (id: string, updateProfileDto: any) =>
     api.patch(`/profiles/me/${id}`, updateProfileDto),
-  getMySets: (id: string) => api.get<Sets[]>(`/profiles/me/${id}/sets`),
+  getMySets: (id: string) => api.get<SetWithCount[]>(`/profiles/me/${id}/sets`),
   getUserSets: (userId: string) => api.get<Sets[]>(`/profiles/${userId}/sets`),
 };
 

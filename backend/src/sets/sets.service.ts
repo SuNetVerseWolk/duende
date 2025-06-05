@@ -55,24 +55,26 @@ export class SetsService {
       },
     });
 
-    // Group sets by profile name
+    // Filter out sets without profiles and group by profile name
     const groupedResult = sets.reduce((acc, set) => {
-      const profileName = set.profiles?.name;
-      if (profileName && !acc[profileName]) {
+      if (!set.profiles?.name) return acc; // Skip sets without profiles
+      
+      const profileName = set.profiles.name;
+      const profileId = set.profiles.id;
+      
+      if (!acc[profileName]) {
         acc[profileName] = {
-          profileId: set.profiles?.id,
-          profileName: profileName,
+          profileId,
+          profileName,
           sets: [],
         };
       }
-      acc[profileName!].sets.push({
-        ...set,
-        cardsCount: set._count.Cards,
-      });
+      
+      acc[profileName].sets.push(set);
       return acc;
-    }, {});
+    }, {} as Record<string, { profileId: string; profileName: string; sets: any[] }>);
 
-    // Convert to array format if preferred
+    // Convert to array format
     return Object.values(groupedResult);
   }
 

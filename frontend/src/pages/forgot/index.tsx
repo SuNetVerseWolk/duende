@@ -1,59 +1,56 @@
-import { supabase } from "@/lib/supabaseClient";
-import React, { FormEvent, useState } from "react";
+"use client"
 
-const index = () => {
-  const [email, setEmail] = useState("");
+import { supabase } from '@/lib/supabaseClient'
+import { useState } from 'react'
 
-	async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-		event.preventDefault();
+export default function ForgotPassword() {
+  const [email, setEmail] = useState('')
+  const [message, setMessage] = useState('')
+  const [loading, setLoading] = useState(false)
 
-		supabase.auth.resetPasswordForEmail(email, {redirectTo: '/confirm'});
-	}
+  const handleReset = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/auth/update-password`,
+      })
+
+      if (error) throw error
+      
+      setMessage('Check your email for the password reset link!')
+    } catch (error) {
+      setMessage((error as Error).message)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-black via-[#1f2834] to-black px-4">
-      <div
-        className="w-full max-w-md p-8 bg-black bg-opacity-90 rounded-xl shadow-2xl
-                      transform transition-transform duration-500 hover:scale-105
-                      border border-gray-700"
-      >
-        <h1 className="text-4xl text-center text-white mb-8 animate-pulse">
-          Забыли пароль
-        </h1>
-        <form className="space-y-6" onSubmit={handleSubmit}>
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-semibold text-gray-300 mb-1"
-            >
-              Email
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="block w-full px-4 py-2 mt-1 text-white bg-gray-700 border border-gray-600 rounded
-                         focus:border-white focus:ring focus:ring-white focus:outline-none
-                         transition-colors duration-300"
-              placeholder="you@example.com"
-              autoComplete="email"
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full px-4 py-2 font-semibold text-white bg-blue-600 rounded
-                       hover:bg-blue-700 transition-colors duration-300 shadow-md
-                       focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-          >
-            Подтвердить
-          </button>
-        </form>
-      </div>
+    <div className="max-w-md mx-auto mt-10">
+      <h1 className="text-2xl font-bold mb-4">Forgot Password</h1>
+      <form onSubmit={handleReset} className="space-y-4">
+        <div>
+          <label htmlFor="email" className="block mb-1">Email</label>
+          <input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="w-full px-3 py-2 border rounded"
+          />
+        </div>
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 disabled:opacity-50"
+        >
+          {loading ? 'Sending...' : 'Send Reset Link'}
+        </button>
+      </form>
+      {message && <p className="mt-4 text-center">{message}</p>}
     </div>
-  );
-};
-
-export default index;
+  )
+}

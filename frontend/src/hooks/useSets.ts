@@ -43,6 +43,7 @@ export const useCreateSet = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['sets'] });
       queryClient.invalidateQueries({ queryKey: ['userSets'] });
+      queryClient.invalidateQueries({ queryKey: ['mySets'] });
       queryClient.invalidateQueries({ queryKey: ['groupedSets'] });
     },
   });

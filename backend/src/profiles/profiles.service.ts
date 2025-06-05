@@ -49,7 +49,7 @@ export class ProfilesService {
       where.privacy = false;
     }
 
-    return this.prisma.sets.findMany({
+    const sets = await this.prisma.sets.findMany({
       where,
       include: {
         _count: {
@@ -57,5 +57,10 @@ export class ProfilesService {
         },
       },
     });
+
+		return sets.map(set => ({
+        ...set,
+        id: set.id.toString()
+    }));
   }
 }
