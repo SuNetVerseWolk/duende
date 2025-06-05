@@ -85,7 +85,7 @@ export default function LogIn() {
           </div>
           <div className="flex items-center justify-between">
             <Link
-              href="/forget"
+              href="/forgot"
               className="text-xs text-blue-400 hover:underline"
             >
               Забыли пароль?

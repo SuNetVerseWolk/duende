@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Cards, profiles, Sets } from "../../generated/prisma";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3000";
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -29,15 +29,15 @@ export const profileApi = {
 
 export const setsApi = {
   create: (createSetDto: Omit<Sets, "id" | "id_profile">, userId: string) =>
-    api.post<Sets>(`/sets`, { ...createSetDto, userId }),
-  findAll: (userId?: string) =>
-    api.get<GroupedSetsResponse>(`/sets`, { params: { userId } }),
+    api.post<Sets>(`/sets/${userId}`, createSetDto),
+  findAll: () =>
+    api.get<GroupedSetsResponse>(`/sets`),
   findOne: (id: bigint, userId?: string) =>
-    api.get<SetWithCount>(`/sets/${id}`, { params: { userId } }),
+    api.get<SetWithCount>(`/sets/${userId}/${id}`),
   update: (id: bigint, updateSetDto: Partial<Sets>, userId: string) =>
-    api.patch<Sets>(`/sets/${id}`, updateSetDto, { params: { userId } }),
+    api.patch<Sets>(`/sets/${userId}/${id}`, updateSetDto),
   remove: (id: bigint, userId: string) =>
-    api.delete<void>(`/sets/${id}`, { params: { userId } }),
+    api.delete<void>(`/sets/${userId}/${id}`),
   findByUser: (profileId: string, includePrivate: boolean = false) =>
     api.get<SetWithCount[]>(`/sets/user/${profileId}`, {
       params: { includePrivate },

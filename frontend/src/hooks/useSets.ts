@@ -6,10 +6,10 @@ import { Sets } from '../../generated/prisma';
 // Helper type for create/update DTOs (omits auto-generated fields)
 type SetMutationDto = Omit<Sets, 'id' | 'id_profile'>;
 
-export const useSets = (userId?: string) => {
+export const useSets = () => {
   return useQuery<GroupedSetsResponse>({
-    queryKey: ['sets', userId],
-    queryFn: () => setsApi.findAll(userId).then(res => res.data),
+    queryKey: ['sets'],
+    queryFn: () => setsApi.findAll().then(res => res.data),
   });
 };
 

@@ -8,6 +8,7 @@ import { useMySets } from "@/hooks/useAuth";
 export default function MySetsContainer() {
   const [openPopUpAdding, setOpenPopUpAdding] = useState(false);
   const { data: mySets, isLoading, isError, error, refetch } = useMySets();
+	console.log(mySets)
 
   return (
     <div
@@ -51,7 +52,7 @@ export default function MySetsContainer() {
           />
         </button>
 
-        {openPopUpAdding && <PopUpAddingSets />}
+        {openPopUpAdding && <PopUpAddingSets onSuccess={() => setOpenPopUpAdding(false)}/>}
       </div>
     </div>
   );
