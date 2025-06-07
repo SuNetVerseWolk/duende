@@ -1,29 +1,32 @@
-import { setsApi } from '@/lib/api';
+import { GroupedSetsResponse, setsApi, SetWithCount } from '@/lib/api';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useUserId } from '@/hooks/useAuth';
+import { Sets } from '../../generated/prisma';
+
+// Helper type for create/update DTOs (omits auto-generated fields)
+type SetMutationDto = Omit<Sets, 'id' | 'id_profile'>;
 
 export const useSets = () => {
-  return useQuery({
+  return useQuery<GroupedSetsResponse>({
     queryKey: ['sets'],
     queryFn: () => setsApi.findAll().then(res => res.data),
   });
 };
 
 export const useSet = (id: bigint) => {
-	const userId = useUserId();
-
-  return useQuery({
+  const userId = useUserId();
+  return useQuery<SetWithCount>({
     queryKey: ['set', id],
-    queryFn: () => setsApi.findOne(userId!, id).then(res => res.data),
+    queryFn: () => setsApi.findOne(id, userId).then(res => res.data),
     enabled: !!id && !!userId,
   });
 };
 
-export const useUserSets = (userId?: string, includePrivate?: boolean) => {
+export const useUserSets = (userId?: string, includePrivate = false) => {
   const currentUserId = useUserId();
   const targetUserId = userId || currentUserId;
-
-  return useQuery({
+  
+  return useQuery<SetWithCount[]>({
     queryKey: ['userSets', targetUserId, includePrivate],
     queryFn: () => setsApi.findByUser(targetUserId!, includePrivate).then(res => res.data),
     enabled: !!targetUserId,
@@ -32,44 +35,47 @@ export const useUserSets = (userId?: string, includePrivate?: boolean) => {
 
 export const useCreateSet = () => {
   const queryClient = useQueryClient();
-	const userId = useUserId();
+  const userId = useUserId();
   
   return useMutation({
-    mutationFn: (createSetDto: any) => setsApi.create(userId!, createSetDto),
+    mutationFn: (createSetDto: SetMutationDto) => 
+      setsApi.create(createSetDto, userId!),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['sets'] });
-      // Also invalidate any user-specific sets queries
       queryClient.invalidateQueries({ queryKey: ['userSets'] });
+      queryClient.invalidateQueries({ queryKey: ['mySets'] });
+      queryClient.invalidateQueries({ queryKey: ['groupedSets'] });
     },
   });
 };
 
-export const useUpdateSet = (id: bigint) => {
+export const useUpdateSet = () => {
   const queryClient = useQueryClient();
-	const userId = useUserId();
+  const userId = useUserId();
   
   return useMutation({
-    mutationFn: (updateSetDto: any) => setsApi.update(userId!, id, updateSetDto),
-    onSuccess: () => {
+    mutationFn: ({ id, data }: { id: bigint, data: Partial<SetMutationDto> }) => 
+      setsApi.update(id, data, userId!),
+    onSuccess: (_, { id }) => {
       queryClient.invalidateQueries({ queryKey: ['sets'] });
       queryClient.invalidateQueries({ queryKey: ['set', id] });
-      // Also invalidate any user-specific sets queries
       queryClient.invalidateQueries({ queryKey: ['userSets'] });
+      queryClient.invalidateQueries({ queryKey: ['groupedSets'] });
     },
   });
 };
 
-export const useDeleteSet = (id: bigint) => {
+export const useDeleteSet = () => {
   const queryClient = useQueryClient();
-	const userId = useUserId();
+  const userId = useUserId();
   
   return useMutation({
-    mutationFn: () => setsApi.remove(userId!, id),
-    onSuccess: () => {
+    mutationFn: (id: bigint) => setsApi.remove(id, userId!),
+    onSuccess: (_, id) => {
       queryClient.invalidateQueries({ queryKey: ['sets'] });
       queryClient.removeQueries({ queryKey: ['set', id] });
-      // Also invalidate any user-specific sets queries
       queryClient.invalidateQueries({ queryKey: ['userSets'] });
+      queryClient.invalidateQueries({ queryKey: ['groupedSets'] });
     },
   });
 };

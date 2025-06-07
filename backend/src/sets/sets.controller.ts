@@ -24,9 +24,9 @@ export class SetsController {
     return this.setsService.create(createSetDto, userId);
   }
 
-  @Get(':userId')
-  async findAllByUser(@Param('userId') userId: string) {
-    return this.setsService.findAll(userId);
+  @Get()
+  async findAll() {
+    return this.setsService.findAll();
   }
 
   @Get(':userId/:id')

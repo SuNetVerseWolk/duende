@@ -51,7 +51,7 @@ export default function MySetsContainer() {
           />
         </button>
 
-        {openPopUpAdding && <PopUpAddingSets />}
+        {openPopUpAdding && <PopUpAddingSets onSuccess={() => setOpenPopUpAdding(false)}/>}
       </div>
     </div>
   );

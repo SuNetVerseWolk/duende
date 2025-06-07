@@ -1,10 +1,9 @@
 "use client";
 
-import {Set} from "@/components/Set";
-import GlobalSetsContainer from "@/components/GlobalSetsContainer";
 import MySetsContainer from "@/components/MySetsContainer";
 import PopUpAddingSets from "@/components/PopUpAddiningSets";
 import { useState } from "react";
+import UserSetsContainer from "@/components/UserSetsContainer";
 
 //interface CardData {
 //  id: number;
@@ -74,7 +73,7 @@ export default function Home() {
           {isMySets ? (
             <MySetsContainer />
           ): (
-            <GlobalSetsContainer/>
+            <UserSetsContainer />
           )}
         </div>
       </main>

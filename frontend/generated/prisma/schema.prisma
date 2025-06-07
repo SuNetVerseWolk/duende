@@ -359,10 +359,8 @@ model Sets {
 model profiles {
   id         String    @id @db.Uuid
   updated_at DateTime? @db.Timestamptz(6)
-  username   String?   @unique
-  full_name  String?
   avatar     String?
-  website    String?
+  name       String?
   Sets       Sets[]
   users      users     @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
