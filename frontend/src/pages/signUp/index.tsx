@@ -56,20 +56,6 @@ export default function index() {
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
             <input
-              id="name"
-              name="name"
-              type="text"
-              required
-              value={formData.name}
-              onChange={handleInputChange}
-              className="block w-full px-4 py-2 mt-1 text-white bg-gray-700 border border-gray-600 rounded
-                         focus:border-white focus:ring focus:ring-white focus:outline-none
-                         transition-colors duration-300"
-              placeholder="ФИО"
-            />
-          </div>
-          <div>
-            <input
               id="email"
               name="email"
               type="email"
