@@ -12,6 +12,9 @@ export type SetWithCount = Sets & {
   _count: { Cards: number };
   Profile: { name: string };
 };
+export type SetWithCards = Sets & {
+	cards: Cards
+}
 
 export type GroupedSetsResponse = Array<{
   profileId: string;
@@ -32,8 +35,8 @@ export const setsApi = {
     api.post<Sets>(`/sets/${userId}`, createSetDto),
   findAll: () =>
     api.get<GroupedSetsResponse>(`/sets`),
-  findOne: (id: bigint, userId?: string) =>
-    api.get<SetWithCount>(`/sets/${userId}/${id}`),
+  findOne: (id: string, userId?: string) =>
+    api.get<SetWithCards>(`/sets/${userId}/${id}`),
   update: (id: bigint, updateSetDto: Partial<Sets>, userId: string) =>
     api.patch<Sets>(`/sets/${userId}/${id}`, updateSetDto),
   remove: (id: bigint, userId: string) =>

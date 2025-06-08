@@ -9,6 +9,12 @@
     --shadow-box: #ffffff58 0 7px 50px;
 }
 
+@layer base {
+	.grid-cols-auto {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  }
+}
+
 * {
     outline: none;
 }

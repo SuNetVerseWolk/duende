@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 
 export default function LogIn() {
   const router = useRouter();
+  const [isLoading, setLoading] = useState(false);
   const [formData, setFromData] = useState({
     email: "",
     password: "",
@@ -17,6 +18,7 @@ export default function LogIn() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    setLoading(true);
     const { error, data } = await supabase.auth.signInWithPassword({
       email: formData.email,
       password: formData.password,
@@ -24,6 +26,7 @@ export default function LogIn() {
 
     if (error) {
       console.log(error);
+      setLoading(false);
       alert("Пароль неверный");
     } else {
       router.replace("/");
@@ -96,8 +99,9 @@ export default function LogIn() {
             className="w-full px-4 py-2 font-semibold text-white bg-blue-600 rounded
                        hover:bg-blue-700 transition-colors duration-300 shadow-md
                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            disabled={isLoading}
           >
-            Войти
+            {isLoading ? "отправляем данные" : "Войти"}
           </button>
         </form>
         <p className="mt-6 text-sm text-center text-gray-300">

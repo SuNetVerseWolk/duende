@@ -1,4 +1,4 @@
-import { GroupedSetsResponse, setsApi, SetWithCount } from '@/lib/api';
+import { GroupedSetsResponse, setsApi, SetWithCards, SetWithCount } from '@/lib/api';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useUserId } from '@/hooks/useAuth';
 import { Sets } from '../../generated/prisma';
@@ -13,9 +13,9 @@ export const useSets = () => {
   });
 };
 
-export const useSet = (id: bigint) => {
+export const useSet = (id: string) => {
   const userId = useUserId();
-  return useQuery<SetWithCount>({
+  return useQuery<SetWithCards>({
     queryKey: ['set', id],
     queryFn: () => setsApi.findOne(id, userId).then(res => res.data),
     enabled: !!id && !!userId,

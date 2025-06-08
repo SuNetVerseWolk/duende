@@ -82,9 +82,7 @@ export class SetsService {
     const set = await this.prisma.sets.findUnique({
       where: { id },
       include: {
-        _count: {
-          select: { Cards: true },
-        },
+				Cards: true
       },
     });
 
