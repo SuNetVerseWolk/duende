@@ -8,43 +8,49 @@ const api = axios.create({
   withCredentials: true,
 });
 
-export type SetWithCount = Sets & {
-  _count: { Cards: number };
-  Profile: { name: string };
-};
+//export type SetWithCount = Sets & {
+//  _count: { Cards: number };
+//  Profile: { name: string };
+//};
 export type SetWithCards = Sets & {
-	cards: Cards
+	_count: { Cards: number },
+	Cards?: Cards[]
 }
 
-export type GroupedSetsResponse = Array<{
-  profileId: string;
-  profileName: string;
-  sets: Array<SetWithCount>;
-}>;
+export type WholeProfiles = profiles & {
+	_count: { Sets: number },
+	Sets: SetWithCards[]
+}
+//export type GroupedSetsResponse = Array<{
+//  profileId: string;
+//  profileName: string;
+//  sets: Array<SetWithCount>;
+//}>;
 
 export const profileApi = {
   getMyProfile: (id: string) => api.get<profiles>(`/profiles/me/${id}`),
   updateMyProfile: (id: string, updateProfileDto: any) =>
     api.patch(`/profiles/me/${id}`, updateProfileDto),
-  getMySets: (id: string) => api.get<SetWithCount[]>(`/profiles/me/${id}/sets`),
+  getMySets: (id: string) => api.get<SetWithCards[]>(`/profiles/me/${id}/sets`),
+	getAllProfiles: () => api.get<WholeProfiles[]>(`/profiles/all`),
   getUserSets: (userId: string) => api.get<Sets[]>(`/profiles/${userId}/sets`),
 };
 
 export const setsApi = {
   create: (createSetDto: Omit<Sets, "id" | "id_profile">, userId: string) =>
     api.post<Sets>(`/sets/${userId}`, createSetDto),
-  findAll: () =>
-    api.get<GroupedSetsResponse>(`/sets`),
+  //findAll: () =>
+  //  api.get<GroupedSetsResponse>(`/sets`),
   findOne: (id: string, userId?: string) =>
     api.get<SetWithCards>(`/sets/${userId}/${id}`),
   update: (id: bigint, updateSetDto: Partial<Sets>, userId: string) =>
     api.patch<Sets>(`/sets/${userId}/${id}`, updateSetDto),
   remove: (id: bigint, userId: string) =>
     api.delete<void>(`/sets/${userId}/${id}`),
-  findByUser: (profileId: string, includePrivate: boolean = false) =>
-    api.get<SetWithCount[]>(`/sets/user/${profileId}`, {
-      params: { includePrivate },
-    }),
+  //findByUser: (profileId: string, includePrivate: boolean = false) =>
+  //  api.get<SetWithCount[]>(`/sets/user/${profileId}`, {
+  //    params: { includePrivate },
+  //  }),
 };
 
 export const cardsApi = {

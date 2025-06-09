@@ -26,6 +26,7 @@ export class SetsController {
 
   @Get()
   async findAll() {
+		console.log('here?')
     return this.setsService.findAll();
   }
 

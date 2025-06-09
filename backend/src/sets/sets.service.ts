@@ -75,6 +75,7 @@ export class SetsService {
     }, {} as Record<string, { profileId: string; profileName: string; sets: any[] }>);
 
     // Convert to array format
+		console.log(Object.values(groupedResult))
     return Object.values(groupedResult);
   }
 

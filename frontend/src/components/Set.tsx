@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import React from 'react'
-import { SetWithCount } from '@/lib/api';
+import { SetWithCards } from '@/lib/api';
 
-export const Set: React.FC<SetWithCount> = ({ ...data }) => {
+export const Set: React.FC<SetWithCards> = ({ ...data }) => {
   return (
     <Link href={`/set/${data.id}`} className='bg-black bg-opacity-90 shadow-2xl text-white
                       transform transition-transform duration-500 hover:scale-105

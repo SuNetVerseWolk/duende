@@ -1,4 +1,4 @@
-import { GroupedSetsResponse, setsApi, SetWithCards, SetWithCount } from '@/lib/api';
+import { setsApi, SetWithCards } from '@/lib/api';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useUserId } from '@/hooks/useAuth';
 import { Sets } from '../../generated/prisma';
@@ -6,12 +6,12 @@ import { Sets } from '../../generated/prisma';
 // Helper type for create/update DTOs (omits auto-generated fields)
 type SetMutationDto = Omit<Sets, 'id' | 'id_profile'>;
 
-export const useSets = () => {
-  return useQuery<GroupedSetsResponse>({
-    queryKey: ['sets'],
-    queryFn: () => setsApi.findAll().then(res => res.data),
-  });
-};
+//export const useSets = () => {
+//  return useQuery<GroupedSetsResponse>({
+//    queryKey: ['sets'],
+//    queryFn: () => setsApi.findAll().then(res => res.data),
+//  });
+//};
 
 export const useSet = (id: string) => {
   const userId = useUserId();
@@ -22,16 +22,16 @@ export const useSet = (id: string) => {
   });
 };
 
-export const useUserSets = (userId?: string, includePrivate = false) => {
-  const currentUserId = useUserId();
-  const targetUserId = userId || currentUserId;
+//export const useUserSets = (userId?: string, includePrivate = false) => {
+//  const currentUserId = useUserId();
+//  const targetUserId = userId || currentUserId;
   
-  return useQuery<SetWithCount[]>({
-    queryKey: ['userSets', targetUserId, includePrivate],
-    queryFn: () => setsApi.findByUser(targetUserId!, includePrivate).then(res => res.data),
-    enabled: !!targetUserId,
-  });
-};
+//  return useQuery<SetWithCount[]>({
+//    queryKey: ['userSets', targetUserId, includePrivate],
+//    queryFn: () => setsApi.findByUser(targetUserId!, includePrivate).then(res => res.data),
+//    enabled: !!targetUserId,
+//  });
+//};
 
 export const useCreateSet = () => {
   const queryClient = useQueryClient();

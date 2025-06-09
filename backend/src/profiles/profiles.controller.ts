@@ -13,6 +13,11 @@ import { profiles } from 'generated/prisma';
 export class ProfilesController {
   constructor(private readonly profilesService: ProfilesService) {}
 
+	@Get('all')
+	getAllProfiles() {
+		return this.profilesService.getAllProfiles();
+	}
+
   @Get('me/:id')
   getMyProfile(@Param('id') id) {
     return this.profilesService.findById(id);

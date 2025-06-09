@@ -68,3 +68,10 @@ export const useUserSets = (userId?: string) => {
     enabled: !!targetUserId,
   });
 };
+
+export const useWholeProfiles = () => {
+	return useQuery({
+		queryKey: ['wholeProfiles'],
+		queryFn: () => profileApi.getAllProfiles().then(res => res.data)
+	})
+}
