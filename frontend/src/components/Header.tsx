@@ -35,8 +35,10 @@ const Header = () => {
             />
           </button>
           {user ? (
-            <Link className="cursor-pointer" href="">
-              <img className="w-12 h-12 filter invert" src="/userIcon.png" alt="User Icon" />
+            <Link className="cursor-pointer flex flex-row gap-2 items-center" href={`/user/${user.id}`}>
+              <img className="w-10 h-10 filter invert" src="/userIcon.png" alt="User Icon" />
+
+              <p className="text-white font-semibold hide-on-small text-[9px] sm:text-base md:text-[10px] lg:text-[12px]">{user.email}</p>
             </Link>
           ) : (
             userIsLoading ? (

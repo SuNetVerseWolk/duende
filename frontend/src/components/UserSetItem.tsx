@@ -85,7 +85,7 @@ export default function UserSetItem() {
   const isDisabled = isLoading || isSubmitting || isDeleting;
 
   if (isLoading || !formData) {
-    return <div className="text-white">Loading...</div>;
+    return <div className="text-white flex flex-col gap-3 sm:gap-4 bg-white/5 p-4 sm:p-5 md:p-6 rounded-2xl my-4 sm:my-5">Загружается...</div>;
   }
 
   return (
