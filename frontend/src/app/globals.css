@@ -24,6 +24,24 @@ button {
 h1 {font-size: 32px ;}
 h2 {font-size: 20px ;}
 
+@media (max-width: 430px) {
+  .hide-on-small {
+    display: none;
+  }
+  .show-on-small {
+    display: block;
+  }
+
+  .full-width-on-small {
+    width: 100%;
+  }
+}
+@media (max-width: 780px) {
+  .hide-log {
+    display: none;
+  }
+}
+
 @layer utilities {
     .no-scrollbar::-webkit-scrollbar {
       display: none;

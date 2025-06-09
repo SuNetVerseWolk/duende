@@ -30,12 +30,12 @@ export default function PopUpAddingSets({
   };
 
   return (
-    <div className="relative p-5 bg-gray-900 border border-gray-700 rounded-lg text-white shadow-lg w-80">
-      <h2 className="text-xl font-bold mb-4">Create New Set</h2>
+    <div className="relative m-3 p-5 bg-gray-900 border border-gray-700 rounded-lg text-white shadow-lg w-80">
+      <h2 className="text-xl font-bold mb-4">Создание набора</h2>
       
       <div className="mb-4">
         <label htmlFor="set-name" className="block text-sm font-medium mb-1">
-          Set Name
+          Название набора
         </label>
         <input
           id="set-name"
@@ -43,7 +43,7 @@ export default function PopUpAddingSets({
                      focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none
                      transition-colors duration-300"
           type="text"
-          placeholder="Enter set name"
+          placeholder="Введите название"
           value={data.name || ""}
           onChange={(e) => setData((prev) => ({ ...prev!, name: e.target.value }))}
           onKeyDown={handleKeyDown}
@@ -53,7 +53,7 @@ export default function PopUpAddingSets({
       </div>
 
       <div className="mb-6">
-        <h3 className="text-sm font-medium mb-2">Privacy Settings</h3>
+        <h3 className="text-sm font-medium mb-2">Приватность</h3>
         
         <div className="flex items-center space-x-4">
           <label className="flex items-center space-x-2 cursor-pointer">
@@ -64,7 +64,7 @@ export default function PopUpAddingSets({
               onChange={() => setData((prev) => ({ ...prev!, privacy: true }))}
               disabled={isPending}
             />
-            <span>Private</span>
+            <span>Приватное</span>
           </label>
           
           <label className="flex items-center space-x-2 cursor-pointer">
@@ -75,7 +75,7 @@ export default function PopUpAddingSets({
               onChange={() => setData((prev) => ({ ...prev!, privacy: false }))}
               disabled={isPending}
             />
-            <span>Public</span>
+            <span>Публичное</span>
           </label>
         </div>
       </div>
@@ -88,7 +88,7 @@ export default function PopUpAddingSets({
           onClick={onClose}
           disabled={isPending}
         >
-          Cancel
+          Отменить
         </button>
         
         <button
@@ -98,7 +98,7 @@ export default function PopUpAddingSets({
           disabled={isPending || !data.name}
           onClick={handleSubmit}
         >
-          {isPending ? "Creating..." : "Create"}
+          {isPending ? "Создается..." : "Сохранить"}
         </button>
       </div>
     </div>

@@ -4,6 +4,7 @@ import { Set } from "@/components/Set";
 import PopUpAddingSets from "@/components/PopUpAddiningSets";
 import { useState } from "react";
 import { useMySets } from "@/hooks/useAuth";
+import "../app/globals.css";
 
 export default function MySetsContainer() {
   const [openPopUpAdding, setOpenPopUpAdding] = useState(false);
@@ -11,8 +12,8 @@ export default function MySetsContainer() {
 
   return (
     <div
-      className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2
-                        bg-white/5 p-5 rounded-b-2xl rounded-r-2xl h-120
+      className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3
+                        bg-white/5 p-5 rounded-b-2xl rounded-r-2xl h-[90%] overflow-auto scroll-smooth
         "
     >
       {isError ? (
@@ -41,7 +42,7 @@ export default function MySetsContainer() {
         <button
           onClick={() => setOpenPopUpAdding(!openPopUpAdding)}
           className="p-2 font-semibold text-white bg-blue-600 rounded-sm
-                       hover:bg-blue-700 transition-colors shadow-md
+                       hover:bg-blue-700 transition-colors shadow-md hide-on-small
                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 duration-300"
         >
           <img

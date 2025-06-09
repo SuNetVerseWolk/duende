@@ -7,31 +7,44 @@ const Header = () => {
   const { data: user, isLoading: userIsLoading } = useUser();
 
   return (
-    <header className="flex justify-center items-center pt-10">
-      <div className="flex justify-between items-center lg:w-[840px] md:w-[500px]">
-        <div className="relative flex items-center h-7">
+    <header className="flex justify-center items-center pt-10 px-4">
+      <div className="flex flex-col-reverse sm:flex-row justify-between items-center w-[100%] min-w-[70%] md:max-w-[80%] gap-4 sm:gap-0">
+        <div className="relative flex items-center w-full sm:w-auto h-10">
           <img
-            className="absolute left-2 w-4 h-4 brightness-10 invert-80"
+            className="absolute left-3 w-5 h-5 brightness-10 invert-80"
             src="/loupe.png"
-            alt=""
+            alt="Поиск"
           />
-
           <input
-            className="pl-8 pr-2 py-2 w-100 rounded-xl text-white bg-gray-700/30 border-gray-600 border-1"
+            className="pl-10 pr-3 py-2 w-96 min-w-[100%] rounded-xl text-white bg-gray-700/30 border border-gray-600"
             type="text"
             placeholder="Поиск"
           />
         </div>
 
-        <Link
-          href="/logIn"
-          className="text-white font-semibold bg-blue-600
-                       hover:bg-blue-700 transition-colors duration-300 shadow-md
-                       focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ml-15 px-15 py-2 rounded-sm"
-        >
-          {userIsLoading ? "подождите..." : user ? "Выход" : "Вход"}
-        </Link>
-      </div>
+        <div className="flex flex-row-reverse justify-between w-[100%]">
+          <button
+            className="p-2 font-semibold text-white bg-blue-600 rounded-sm
+                        hover:bg-blue-700 transition-colors shadow-md hidden show-on-small
+                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 duration-300"
+          >
+            <img
+              className="w-6 h-6 brightness-20 invert-100"
+              src="/plus_2.png"
+              alt=""
+            />
+          </button>
+          <Link
+            href="/logIn"
+            className="text-white font-semibold bg-blue-600
+                      hover:bg-blue-700 transition-colors duration-300 shadow-md
+                      focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+                      px-6 py-2 rounded-sm sm:w-auto text-center"
+          >
+            {userIsLoading ? "подождите..." : user ? "Выход" : "Вход"}
+          </Link>
+        </div>
+        </div>
     </header>
   );
 };
