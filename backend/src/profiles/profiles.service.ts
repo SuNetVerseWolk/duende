@@ -34,7 +34,7 @@ export class ProfilesService {
       ...profile,
       Sets: profile.Sets.map((set) => ({
         ...set,
-        id: set.id.toString,
+        id: set.id.toString(),
         Cards: set.Cards.map((card) => ({ ...card, id: card.id.toString() })),
       })),
     }));
