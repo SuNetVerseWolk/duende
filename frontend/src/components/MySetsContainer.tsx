@@ -12,29 +12,30 @@ export default function MySetsContainer() {
 
   return (
     <div
-      className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3
-                        bg-white/5 p-5 rounded-b-2xl rounded-r-2xl h-[90%] overflow-auto scroll-smooth
+      // className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3
+      //                   bg-white/5 p-5 rounded-b-2xl rounded-r-2xl h-[90%] overflow-auto scroll-smooth
+
+      className="grid grid-cols-auto gap-2 md:gap-4
+                        bg-white/5 p-5 rounded-b-2xl rounded-r-2xl h-120
         "
     >
       {isError ? (
-        <div className="text-gray-400 space-y-1">
-          <p>{error.name}</p>
-          <hr />
-          <p>{error.message}</p>
-          <button
-            onClick={(e) => refetch()}
-            className="bg-black bg-opacity-90 shadow-2xl text-white
-                      transform transition-transform duration-500 hover:scale-105
-                      hover:border-b-4 hover:border-b-blue-500
-                      border border-gray-700 p-1 rounded-md cursor-pointer"
-          >
-            Повторить
-          </button>
-        </div>
-      ) : isLoading ? (
-        <span className="text-gray-400">Загрузка</span>
-      ) : mySets?.length === 0 ? (
-        <span className="text-gray-400">Пусто</span>
+				<div className="flex justify-center items-center">
+					<div className="flex flex-col justify-center items-center text-gray-400 space-y-1">
+						<p>{error.message}</p>
+						<button
+							onClick={(e) => refetch()}
+							className="bg-black bg-opacity-90 shadow-2xl text-white
+												transform transition-transform duration-500 hover:scale-105
+												hover:border-b-4 hover:border-b-blue-500
+												border border-gray-700 p-1 rounded-md cursor-pointer"
+						>
+							Повторить
+						</button>
+					</div>
+				</div>
+      ) : !mySets ? (
+        <span className="flex justify-center items-center text-gray-400">{isLoading ? "Загрузка" : "Пусто"}</span>
       ) : (
         mySets?.map((el) => <Set key={el.id} {...el} />)
       )}

@@ -35,7 +35,9 @@ export class SetsController {
 		@Param('userId') userId: string
   ) {
     try {
-      return await this.setsService.findOne(id, userId);
+			const data = await this.setsService.findOne(id, userId);
+
+      return {...data, id: data.id.toString()};
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw new NotFoundException('Set not found');
