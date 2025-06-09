@@ -9,7 +9,7 @@ export const Set: React.FC<SetWithCards> = ({ ...data }) => {
                       hover:border-b-4 hover:border-b-blue-500
                       border border-gray-700" p-2.5 rounded-md h-25 cursor-pointer'>
         <h2>{data.name}</h2>
-        <p>{data._count.Cards}</p>
+        <p>Карточек: {data._count.Cards}</p>
     </Link>
   )
 }
