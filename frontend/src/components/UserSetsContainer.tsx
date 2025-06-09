@@ -2,6 +2,7 @@ import { Set } from "./Set";
 import "../app/globals.css";
 import { useWholeProfiles } from "@/hooks/useAuth";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function UserSetsContainer() {
   const { data, isLoading } = useWholeProfiles();
@@ -17,7 +18,8 @@ export default function UserSetsContainer() {
           (profile) =>
             profile.Sets.length > 0 && (
               <div key={profile.id} className="text-white">
-                <div
+                <Link
+									href={`user/${profile.id}`}
                   className="flex items-center 
                     hover:text-white/70 transition-colors duration-300
                     bg-white/5 w-fit rounded-t-lg p-1 mt-2 cursor-pointer"
@@ -34,7 +36,7 @@ export default function UserSetsContainer() {
                   {/*<div className="rounded-full w-7 h-7 bg-blue-900"></div>*/}
 
                   <h2 className="px-2 py-1.5">{profile.name || "Безымяный"}</h2>
-                </div>
+                </Link>
 
                 <div
                   className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2
