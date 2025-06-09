@@ -1,10 +1,16 @@
 "use client";
-import { useUser } from "@/hooks/useAuth";
+import { useProfile, useUser } from "@/hooks/useAuth";
+import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useMemo } from "react";
 
 const Header = () => {
   const { data: user, isLoading: userIsLoading } = useUser();
+  const { data: profile, isLoading: profileIsLoading } = useProfile();
+  const isLoading = useMemo(
+    () => userIsLoading && profileIsLoading,
+    [userIsLoading, profileIsLoading]
+  );
 
   return (
     <header className="flex justify-center items-center pt-10 px-4">
@@ -35,28 +41,37 @@ const Header = () => {
             />
           </button>
           {user ? (
-            <Link className="cursor-pointer flex flex-row gap-2 items-center" href={`/user/${user.id}`}>
-              <img className="w-10 h-10 filter invert" src="/userIcon.png" alt="User Icon" />
+            <Link
+              className="cursor-pointer flex flex-row gap-2 items-center"
+              href={`/user/${user.id}`}
+            >
+              <Image
+                className={`w-10 h-10 filter ${profile?.avatar ? '' : 'invert'}`}
+                src={profile?.avatar || "/userIcon.png"}
+                alt="User Icon"
+								width={40}
+								height={40}
+              />
 
-              <p className="text-white font-semibold hide-on-small text-[9px] sm:text-base md:text-[10px] lg:text-[12px]">{user.email}</p>
+              <p className="text-white font-semibold hide-on-small text-[9px] sm:text-base md:text-[10px] lg:text-[12px]">
+                {user.email}
+              </p>
             </Link>
+          ) : isLoading ? (
+            <span className="text-white font-semibold">Загружается...</span>
           ) : (
-            userIsLoading ? (
-              <span className="text-white font-semibold">Загружается...</span>
-            ): (
-              <Link
-                href="/logIn"
-                className="text-white font-semibold bg-blue-600
+            <Link
+              href="/logIn"
+              className="text-white font-semibold bg-blue-600
                           hover:bg-blue-700 transition-colors duration-300 shadow-md
                           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
                           px-6 py-2 rounded-sm sm:w-auto text-center"
-              >
-                Вход
-              </Link>
-            )
+            >
+              Вход
+            </Link>
           )}
         </div>
-        </div>
+      </div>
     </header>
   );
 };

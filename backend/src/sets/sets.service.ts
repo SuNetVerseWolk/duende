@@ -104,7 +104,7 @@ export class SetsService {
     return this.prisma.sets.update({
       where: { id },
       data: updateSetDto,
-    });
+    }).then(sets => ({...sets, id: sets.id.toString()}));
   }
 
   async remove(id: bigint, userId: string) {

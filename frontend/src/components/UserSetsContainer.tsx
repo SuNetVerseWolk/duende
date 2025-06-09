@@ -1,6 +1,7 @@
 import { Set } from "./Set";
 import "../app/globals.css";
 import { useWholeProfiles } from "@/hooks/useAuth";
+import Image from "next/image";
 
 export default function UserSetsContainer() {
   const { data, isLoading } = useWholeProfiles();
@@ -21,7 +22,16 @@ export default function UserSetsContainer() {
                     hover:text-white/70 transition-colors duration-300
                     bg-white/5 w-fit rounded-t-lg p-1 mt-2 cursor-pointer"
                 >
-                  <div className="rounded-full w-7 h-7 bg-blue-900"></div>
+                  <Image
+                    className={`w-10 h-10 filter ${
+                      profile?.avatar ? "" : "invert"
+                    }`}
+                    src={profile?.avatar || "/userIcon.png"}
+                    alt="User Icon"
+                    width={40}
+                    height={40}
+                  />
+                  {/*<div className="rounded-full w-7 h-7 bg-blue-900"></div>*/}
 
                   <h2 className="px-2 py-1.5">{profile.name || "Безымяный"}</h2>
                 </div>

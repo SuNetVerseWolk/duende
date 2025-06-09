@@ -129,7 +129,7 @@ export default function UserSetItem() {
                 id="closed"
                 name="privacy"
                 className="h-4 w-4"
-                checked={!formData.privacy}
+                checked={formData.privacy}
                 onChange={() => handleRadioChange(false)}
                 disabled={isDisabled}
               />
@@ -144,7 +144,7 @@ export default function UserSetItem() {
                 id="global"
                 name="privacy"
                 className="h-4 w-4 ml-0 sm:ml-3"
-                checked={formData.privacy}
+                checked={!formData.privacy}
                 onChange={() => handleRadioChange(true)}
                 disabled={isDisabled}
               />
