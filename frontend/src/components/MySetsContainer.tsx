@@ -12,12 +12,8 @@ export default function MySetsContainer() {
 
   return (
     <div
-      // className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3
-      //                   bg-white/5 p-5 rounded-b-2xl rounded-r-2xl h-[90%] overflow-auto scroll-smooth
-
-      className="grid grid-cols-auto gap-2 md:gap-4
-                        bg-white/5 p-5 rounded-b-2xl rounded-r-2xl h-120
-        "
+      className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3
+                        bg-white/5 p-5 rounded-b-2xl rounded-r-2xl h-[90%] overflow-auto scroll-smooth"
     >
       {isError ? (
 				<div className="flex justify-center items-center">
