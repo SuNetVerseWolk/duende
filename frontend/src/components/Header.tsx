@@ -34,15 +34,25 @@ const Header = () => {
               alt=""
             />
           </button>
-          <Link
-            href="/logIn"
-            className="text-white font-semibold bg-blue-600
-                      hover:bg-blue-700 transition-colors duration-300 shadow-md
-                      focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
-                      px-6 py-2 rounded-sm sm:w-auto text-center"
-          >
-            {userIsLoading ? "подождите..." : user ? "Выход" : "Вход"}
-          </Link>
+          {user ? (
+            <Link className="cursor-pointer" href="">
+              <img className="w-12 h-12 filter invert" src="/userIcon.png" alt="User Icon" />
+            </Link>
+          ) : (
+            userIsLoading ? (
+              <span className="text-white font-semibold">Загружается...</span>
+            ): (
+              <Link
+                href="/logIn"
+                className="text-white font-semibold bg-blue-600
+                          hover:bg-blue-700 transition-colors duration-300 shadow-md
+                          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+                          px-6 py-2 rounded-sm sm:w-auto text-center"
+              >
+                Вход
+              </Link>
+            )
+          )}
         </div>
         </div>
     </header>

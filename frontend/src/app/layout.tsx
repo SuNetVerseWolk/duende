@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
 import Header from "@/components/Header";
 import "./globals.css";
+import ClientVisibility from "./clientComponents/ClientVisibility";
+// import ClientVisibility from "./clientComponents/ClientVisibility";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,10 +34,11 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <img className="absolute right-0 bottom-0 w-20 h-19 hide-log" src="/iconDuende_2.png" alt="logo" />
+        <ClientVisibility>
+          <img className="absolute right-0 bottom-0 w-20 h-19 hide-log" src="/iconDuende_2.png" alt="logo" />
+        </ClientVisibility>
 
 				<ReactQueryProvider>
-        	<Header />
         	{children}
 				</ReactQueryProvider>
       </body>

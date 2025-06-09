@@ -6,11 +6,11 @@ export default function UserSetsContainer() {
 	const { data, isLoading } = useWholeProfiles();
 
   return (
-    <div className="h-120 overflow-y-scroll no-scrollbar border-white/5 border-1 px-4 rounded-2xl">
+    <div className="h-[100%] overflow-y-scroll no-scrollbar border-white/5 border-1 px-4 rounded-2xl">
       {isLoading ? (
-        <div>Loading</div>
+        <div>Загрузка</div>
       ) : data?.length == 0 ? (
-				<div>Empty</div>
+				<div>Пусто</div>
 			) : (
         data?.map((profile) => (
           <div key={profile.id} className="text-white">
