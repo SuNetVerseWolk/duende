@@ -1,6 +1,9 @@
+
+"use client";
 import { profileApi } from '@/lib/api';
 import { supabase } from '@/lib/supabaseClient';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/router';
 
 // Base user fetching function
 const fetchUser = async () => {
