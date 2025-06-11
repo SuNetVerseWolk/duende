@@ -54,7 +54,7 @@ const Header = () => {
               />
 
               <p className="text-white font-semibold hide-on-small text-[9px] sm:text-base md:text-[10px] lg:text-[12px]">
-                {user.email}
+                {profile?.name == null ? user.email: profile?.name}
               </p>
             </Link>
           ) : isLoading ? (
