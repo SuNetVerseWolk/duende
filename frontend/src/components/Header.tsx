@@ -29,7 +29,7 @@ const Header = () => {
         </div>
 
         <div className="flex flex-row-reverse justify-between w-[100%]">
-          <button
+          <Link href={'/set/0'}
             className="p-2 font-semibold text-white bg-blue-600 rounded-sm
                         hover:bg-blue-700 transition-colors shadow-md hidden show-on-small
                         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 duration-300"
@@ -39,7 +39,7 @@ const Header = () => {
               src="/plus_2.png"
               alt=""
             />
-          </button>
+          </Link>
           {user ? (
             <Link
               className="cursor-pointer flex flex-row gap-2 items-center"

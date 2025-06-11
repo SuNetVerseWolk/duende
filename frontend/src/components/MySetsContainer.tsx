@@ -33,7 +33,7 @@ export default function MySetsContainer() {
 					</div>
 				</div>
       ) : !mySets ? (
-        <span className="flex justify-center items-center text-gray-400 h-full w-full">{isLoading ? "Загрузка" : "Пусто"}</span>
+        <span className="flex justify-center items-center text-gray-400 h-full w-full">{isLoading ? "Загрузка..." : "Пусто"}</span>
       ) : (
           <div className="w-full grid grid-cols-auto gap-2 md:gap-4">
             {mySets?.map((el) => <Set key={el.id} {...el} />)}</div>

@@ -10,9 +10,9 @@ export default function UserSetsContainer() {
   return (
     <div className="h-[100%] overflow-y-scroll no-scrollbar border-white/5 border-1 px-4 rounded-2xl">
       {isLoading ? (
-        <div>Загрузка</div>
+        <div className="flex justify-center items-center text-gray-400 h-full w-full">Загрузка...</div>
       ) : data?.length == 0 ? (
-        <div>Пусто</div>
+        <div className="flex justify-center items-center text-gray-400 h-full w-full">Пусто</div>
       ) : (
         data?.map(
           (profile) =>
