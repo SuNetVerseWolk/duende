@@ -51,12 +51,11 @@ const Card = () => {
         value={term}
         onChange={(e) => setTerm(e.target.value)}
       />
-      <input
-        type="text"
+      <textarea
         className="w-full px-3 sm:px-4 py-2 text-white bg-gray-700 border-b border-b-gray-600
                         focus:border-b-white placeholder-gray-400
                         transition-colors duration-300 text-sm sm:text-base mt-2"
-        placeholder="Перевод"
+        placeholder="Определение"
         value={definition}
         onChange={(e) => setDefinition(e.target.value)}
       />
