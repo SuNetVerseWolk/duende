@@ -21,7 +21,7 @@ export const Set: React.FC<SetWithCards> = ({ ...data }) => {
       >
         <h2 className="text-lg sm:text-base md:text-lg lg:text-xl font-semibold">{data.name}</h2>
 
-        <p className="text-sm sm:text-[9] md:text-sm lg:text-base">Карточек: {data._count.Cards}</p>
+        <p className="text-sm sm:text-[9] md:text-sm lg:text-base truncate">Карточек: {data._count.Cards}</p>
     </Link>
   )
 }
