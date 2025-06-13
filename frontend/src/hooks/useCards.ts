@@ -1,12 +1,13 @@
 import { cardsApi } from '@/lib/api';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useUserId } from './useAuth';
+import { Cards } from '../../generated/prisma';
 
-export const useCardsForSet = (setId: bigint) => {
-	const userId = useUserId();
+export const useCardsForSet = (setId: string) => {
+  const userId = useUserId();
 
   return useQuery({
-    queryKey: ['cards', 'set', setId, userId],
+    queryKey: ['set', setId],
     queryFn: () => cardsApi.findAllForSet(setId, userId!).then(res => res.data),
     enabled: !!setId && !!userId,
   });
@@ -24,17 +25,14 @@ export const useCard = (id: bigint) => {
 
 export const useCreateCard = () => {
   const queryClient = useQueryClient();
-	const userId = useUserId();
+  const userId = useUserId();
   
   return useMutation({
-    mutationFn: (createCardDto: any) => cardsApi.create(userId!, createCardDto),
+    mutationFn: (createCardDto: Omit<Cards, "id" | "created_at">) => cardsApi.create(userId!, createCardDto),
     onSuccess: (_, variables) => {
-      // Invalidate the cards query for the specific set
-      if (variables.setId) {
-        queryClient.invalidateQueries({
-          queryKey: ['cards', 'set', variables.setId, userId],
-        });
-      }
+      queryClient.invalidateQueries({
+        queryKey: ['set', variables.id_set],
+      });
     },
   });
 };

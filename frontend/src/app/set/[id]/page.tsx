@@ -3,11 +3,14 @@
 import React from "react";
 import Card from "@/components/Card";
 import UserSetItem from "@/components/UserSetItem";
-import { useCard, useCreateCard, useCardsForSet } from "@/hooks/useCards";
+import { useCreateCard, useCardsForSet } from "@/hooks/useCards";
 import { useState } from "react";
+import { useParams } from "next/navigation";
 
-const Page = ({ setId }: { setId: bigint }) => {
-  const { data: cards, isLoading, error } = useCardsForSet(setId);
+const Page = () => {
+	const params = useParams();
+	const setId = (params?.id ? params.id : "") as string;
+  const { data: set, isLoading, error } = useCardsForSet(setId);
 
   const createCardMutation = useCreateCard();
 
@@ -17,9 +20,9 @@ const Page = ({ setId }: { setId: bigint }) => {
     setIsAdding(true);
     try {
       await createCardMutation.mutateAsync({
-        setId,
-        title: "Новая карточка",
-        content: "Описание карточки",
+        id_set: BigInt(setId),
+        text: "Новая карточка",
+        translation: "Описание карточки",
       });
     } catch (e) {
       console.error("Ошибка при добавлении карточки", e);
@@ -46,15 +49,13 @@ const Page = ({ setId }: { setId: bigint }) => {
         </button>
 
         <div className="flex flex-col bg-white/5 p-5 min-h-50 rounded-2xl overflow-auto">
-          {isLoading && <p className="text-gray-400">Загрузка карточек...</p>}
-          {error && (
+          {isLoading ? <p className="text-gray-400">Загрузка карточек...</p> :
+          error ? (
             <p className="text-red-500">Ошибка загрузки карточек</p>
-          )}
-          {cards && cards.length === 0 && (
+          ) : set && set.Cards?.length === 0 ? (
             <p className="text-gray-400">Карточек пока нет</p>
-          )}
-          {cards ? (
-            cards.map((card) => (
+          ) : set?.Cards ? (
+            set.Cards.map((card) => (
               <Card key={card.id} {...card} />))
           ): (
             <span className="text-gray-400">Пусто</span>

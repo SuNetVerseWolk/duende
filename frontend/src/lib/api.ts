@@ -55,9 +55,12 @@ export const setsApi = {
 
 export const cardsApi = {
   create: (userId: string, createCardDto: any) =>
-    api.post(`/cards/${userId}`, createCardDto),
-  findAllForSet: (setId: bigint, userId: string) =>
-    api.get<Cards[]>(`/cards/set/${setId}/by/${userId}`),
+    api.post(`/cards/${userId}`, {
+      ...createCardDto,
+      //id_set: createCardDto.id_set?.toString() // Ensure string conversion
+    }),
+  findAllForSet: (setId: string, userId: string) =>
+    api.get<SetWithCards>(`/cards/set/${setId}/by/${userId}`),
   findOne: (id: bigint, userId: string) =>
     api.get<Cards>(`/cards/${id}/by/${userId}`),
   update: (id: bigint, userId: string, updateCardDto: any) =>
