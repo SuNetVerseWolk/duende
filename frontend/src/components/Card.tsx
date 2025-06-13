@@ -37,7 +37,7 @@ const Card: React.FC<Cards> = ({ ...params }) => {
       if (!response.ok) throw new Error("Definition generation failed");
 
       const data = await response.json();
-      setCard((prev) => ({ ...prev, definition: data.definition }));
+      setCard((prev) => ({ ...prev, translation: data.definition }));
     } catch (err) {
       setError("Failed to generate definition");
       console.error(err);
