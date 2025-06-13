@@ -43,13 +43,13 @@ export const useUpdateCard = (id: bigint) => {
   
   return useMutation({
     mutationFn: (updateCardDto: Omit<Cards, 'id' | 'created_at'>) => cardsApi.update(id, userId!, updateCardDto),
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
         queryKey: ['card', id, userId],
       });
       // Also invalidate any set-specific cards queries
       queryClient.invalidateQueries({
-        queryKey: ['cards', 'set'],
+        queryKey: ['set'],
       });
     },
   });
@@ -67,7 +67,7 @@ export const useDeleteCard = (id: bigint) => {
       });
       // Also invalidate any set-specific cards queries
       queryClient.invalidateQueries({
-        queryKey: ['cards', 'set'],
+        queryKey: ['set'],
       });
     },
   });

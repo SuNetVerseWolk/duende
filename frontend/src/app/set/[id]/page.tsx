@@ -21,8 +21,8 @@ const Page = () => {
     try {
       await createCardMutation.mutateAsync({
         id_set: BigInt(setId),
-        text: "Новая карточка",
-        translation: "Описание карточки",
+        text: "",
+        translation: "",
       });
     } catch (e) {
       console.error("Ошибка при добавлении карточки", e);
