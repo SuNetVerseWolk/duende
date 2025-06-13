@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  ForbiddenException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Cards } from 'generated/prisma';
 
@@ -15,54 +11,41 @@ export class CardsService {
       await this.verifySetOwnership(createCardDto.id_set, userId);
     }
 
-    const card = await this.prisma.cards.create({
+    return this.prisma.cards.create({
       data: {
         text: createCardDto.text,
         translation: createCardDto.translation,
         id_set: createCardDto.id_set,
       },
     });
-
-    // Quick fix: Convert BigInt to string manually
-    return JSON.parse(
-      JSON.stringify(card, (key, value) =>
-        typeof value === 'bigint' ? value.toString() : value,
-      ),
-    );
   }
 
   async findAllForSet(setId: bigint, userId?: string) {
     const where: any = { id_set: setId };
-
+    
     if (userId) {
       where.Sets = {
-        OR: [{ privacy: false }, { id_profile: userId }],
+        OR: [
+          { privacy: false },
+          { id_profile: userId },
+        ],
       };
     } else {
       where.Sets = { privacy: false };
     }
-    console.log('getting all cards');
 
-    return this.prisma.cards
-      .findMany({
-        where,
-        include: {
-          Sets: {
-            select: {
-              id: true,
-              name: true,
-              privacy: true,
-            },
+    return this.prisma.cards.findMany({
+      where,
+      include: {
+        Sets: {
+          select: {
+            id: true,
+            name: true,
+            privacy: true,
           },
         },
-      })
-      .then((cards) =>
-        cards.map((card) => ({
-          ...card,
-          id: card.id.toString(),
-          Sets: { ...card.Sets, id: card.Sets?.id.toString() },
-        })),
-      );
+      },
+    });
   }
 
   async findOne(id: bigint, userId?: string) {
@@ -92,11 +75,9 @@ export class CardsService {
 
   async update(id: bigint, updateCardDto: Cards, userId: string) {
     const card = await this.findOne(id, userId);
-
+    
     if (card.Sets?.id_profile !== userId) {
-      throw new ForbiddenException(
-        'You can only update cards in your own sets',
-      );
+      throw new ForbiddenException('You can only update cards in your own sets');
     }
 
     return this.prisma.cards.update({
@@ -107,11 +88,9 @@ export class CardsService {
 
   async remove(id: bigint, userId: string) {
     const card = await this.findOne(id, userId);
-
+    
     if (card.Sets?.id_profile !== userId) {
-      throw new ForbiddenException(
-        'You can only delete cards in your own sets',
-      );
+      throw new ForbiddenException('You can only delete cards in your own sets');
     }
 
     return this.prisma.cards.delete({

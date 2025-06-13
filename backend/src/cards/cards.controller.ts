@@ -22,12 +22,12 @@ export class CardsController {
   }
 
   @Get('set/:setId/by/:userId')
-	findAllForSet(
-		@Param('setId') setId: string,
-		@Param('userId') userId: string
-	) {
-		return this.cardsService.findAllForSet(BigInt(setId), userId);
-	}
+  findAllForSet(
+    @Param('setId', ParseIntPipe) setId: bigint,
+    @Param('userId') userId: string
+  ) {
+    return this.cardsService.findAllForSet(setId, userId);
+  }
 
   @Get(':id/by/:userId')
   findOne(@Param('id', ParseIntPipe) id: bigint, @Param('userId') userId: string) {
