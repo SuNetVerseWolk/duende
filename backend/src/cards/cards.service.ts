@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Cards } from 'generated/prisma';
 
@@ -22,19 +26,16 @@ export class CardsService {
 
   async findAllForSet(setId: bigint, userId?: string) {
     const where: any = { id_set: setId };
-    
+
     if (userId) {
       where.Sets = {
-        OR: [
-          { privacy: false },
-          { id_profile: userId },
-        ],
+        OR: [{ privacy: false }, { id_profile: userId }],
       };
     } else {
       where.Sets = { privacy: false };
     }
 
-    return this.prisma.cards.findMany({
+    const cards = await this.prisma.cards.findMany({
       where,
       include: {
         Sets: {
@@ -46,6 +47,13 @@ export class CardsService {
         },
       },
     });
+
+    return cards.map((card) => ({
+      ...card,
+      id: card.id.toString(),
+      id_set: card.id_set?.toString(),
+      Sets: { ...card.Sets, id: card.Sets?.id.toString() },
+    }));
   }
 
   async findOne(id: bigint, userId?: string) {
@@ -75,9 +83,11 @@ export class CardsService {
 
   async update(id: bigint, updateCardDto: Cards, userId: string) {
     const card = await this.findOne(id, userId);
-    
+
     if (card.Sets?.id_profile !== userId) {
-      throw new ForbiddenException('You can only update cards in your own sets');
+      throw new ForbiddenException(
+        'You can only update cards in your own sets',
+      );
     }
 
     return this.prisma.cards.update({
@@ -88,9 +98,11 @@ export class CardsService {
 
   async remove(id: bigint, userId: string) {
     const card = await this.findOne(id, userId);
-    
+
     if (card.Sets?.id_profile !== userId) {
-      throw new ForbiddenException('You can only delete cards in your own sets');
+      throw new ForbiddenException(
+        'You can only delete cards in your own sets',
+      );
     }
 
     return this.prisma.cards.delete({
