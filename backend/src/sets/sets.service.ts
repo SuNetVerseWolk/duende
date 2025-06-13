@@ -56,26 +56,32 @@ export class SetsService {
     });
 
     // Filter out sets without profiles and group by profile name
-    const groupedResult = sets.reduce((acc, set) => {
-      if (!set.profiles?.name) return acc; // Skip sets without profiles
-      
-      const profileName = set.profiles.name;
-      const profileId = set.profiles.id;
-      
-      if (!acc[profileName]) {
-        acc[profileName] = {
-          profileId,
-          profileName,
-          sets: [],
-        };
-      }
-      
-      acc[profileName].sets.push(set);
-      return acc;
-    }, {} as Record<string, { profileId: string; profileName: string; sets: any[] }>);
+    const groupedResult = sets.reduce(
+      (acc, set) => {
+        if (!set.profiles?.name) return acc; // Skip sets without profiles
+
+        const profileName = set.profiles.name;
+        const profileId = set.profiles.id;
+
+        if (!acc[profileName]) {
+          acc[profileName] = {
+            profileId,
+            profileName,
+            sets: [],
+          };
+        }
+
+        acc[profileName].sets.push(set);
+        return acc;
+      },
+      {} as Record<
+        string,
+        { profileId: string; profileName: string; sets: any[] }
+      >,
+    );
 
     // Convert to array format
-		console.log(Object.values(groupedResult))
+    console.log(Object.values(groupedResult));
     return Object.values(groupedResult);
   }
 
@@ -83,7 +89,7 @@ export class SetsService {
     const set = await this.prisma.sets.findUnique({
       where: { id },
       include: {
-				Cards: true
+        Cards: true,
       },
     });
 
@@ -95,16 +101,26 @@ export class SetsService {
       throw new ForbiddenException('You do not have access to this set');
     }
 
-    return set;
+    return {
+      ...set,
+      id: set.id.toString(),
+      Cards: set.Cards.map((card) => ({
+        ...card,
+        id: card.id.toString(),
+        id_set: card.id_set?.toString(),
+      })),
+    };
   }
 
   async update(id: bigint, updateSetDto: Sets, userId: string) {
     const set = await this.verifyOwnership(id, userId);
 
-    return this.prisma.sets.update({
-      where: { id },
-      data: updateSetDto,
-    }).then(sets => ({...sets, id: sets.id.toString()}));
+    return this.prisma.sets
+      .update({
+        where: { id },
+        data: updateSetDto,
+      })
+      .then((sets) => ({ ...sets, id: sets.id.toString() }));
   }
 
   async remove(id: bigint, userId: string) {
