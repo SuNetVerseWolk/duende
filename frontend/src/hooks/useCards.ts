@@ -42,7 +42,7 @@ export const useUpdateCard = (id: bigint) => {
 	const userId = useUserId();
   
   return useMutation({
-    mutationFn: (updateCardDto: any) => cardsApi.update(id, userId!, updateCardDto),
+    mutationFn: (updateCardDto: Omit<Cards, 'id' | 'created_at'>) => cardsApi.update(id, userId!, updateCardDto),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['card', id, userId],
