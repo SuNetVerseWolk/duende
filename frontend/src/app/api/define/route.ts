@@ -4,7 +4,7 @@ import OpenAI from "openai";
 const openai = new OpenAI({
   apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
   baseURL: "https://openrouter.ai/api/v1",
-	maxRetries: 10
+  maxRetries: 10,
 });
 
 export async function POST(req: Request) {
@@ -22,13 +22,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const { text, term } = requestBody;
-    if (!text || typeof text !== "string" || text.trim().length === 0) {
-      return NextResponse.json(
-        { error: "Invalid text parameter" },
-        { status: 400 }
-      );
-    }
+    const { term } = requestBody;
     if (!term || typeof term !== "string" || term.trim().length === 0) {
       return NextResponse.json(
         { error: "Invalid term parameter" },
@@ -38,17 +32,16 @@ export async function POST(req: Request) {
 
     const completion = await openai.chat.completions.create(
       {
-        model: process.env.NEXT_PUBLIC_OPENAI_MODEL || "deepseek/deepseek-chat:free",
+        model:
+          process.env.NEXT_PUBLIC_OPENAI_MODEL || "deepseek/deepseek-chat:free",
         messages: [
           {
-            role: "user",
+            role: "system",
             content: `
 						Term: "${term}"
-						Text: "${text}"
-            Define the following term "${term}" in 1-2 sentences depending on the text so that Russian could get the meaning of the term not exacly of the text.
-						You should understand where to use English and where to use Russian to make the definition more clear by sight, shortly don't translate everything into Russian.
-            Use simple and casual Russian language and provide context if needed.
-						Don't use the term in ur response and don't describe the text.
+            Определите следующий термин "${term}" в 1-2 предложениях, чтобы русский человек мог понять значение термина сразу же.
+						Используйте простой и непринужденный русский язык и, при необходимости, укажите контекст.
+						Не используйте термин в своем ответе, достаточно краткого описания.
           `,
           },
         ],
@@ -72,7 +65,7 @@ export async function POST(req: Request) {
       definition,
     });
   } catch (error) {
-		clearTimeout(timeout);
+    clearTimeout(timeout);
     console.error("API Error:", error);
     return NextResponse.json(
       { error: "Internal server error" },

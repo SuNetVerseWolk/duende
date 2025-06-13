@@ -20,7 +20,7 @@ const Card = () => {
       const response = await fetch("/api/define", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: "", term: term.trim() }),
+        body: JSON.stringify({ term: term.trim() }),
       });
 
       if (!response.ok) throw new Error("Definition generation failed");
