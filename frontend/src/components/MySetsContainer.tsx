@@ -14,29 +14,33 @@ export default function MySetsContainer() {
     <div
       // className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3
       //                   bg-white/5 p-5 rounded-b-2xl rounded-r-2xl h-[90%] overflow-auto scroll-smooth"
-    className=" bg-white/5 p-5 rounded-b-2xl rounded-r-2xl h-[100%] overflow-auto scroll-smooth
-        "
+      className=" bg-white/5 p-5 rounded-b-2xl rounded-r-2xl h-[100%] overflow-auto scroll-smooth"
     >
       {isError ? (
-				<div className="flex justify-center items-center">
-					<div className="flex flex-col justify-center items-center text-gray-400 space-y-1">
-						<p>{error.message}</p>
-						<button
-							onClick={(e) => refetch()}
-							className="bg-black bg-opacity-90 shadow-2xl text-white
+        <div className="flex justify-center items-center">
+          <div className="flex flex-col justify-center items-center text-gray-400 space-y-1">
+            <p>{error.message}</p>
+            <button
+              onClick={(e) => refetch()}
+              className="bg-black bg-opacity-90 shadow-2xl text-white
 												transform transition-transform duration-500 hover:scale-105
 												hover:border-b-4 hover:border-b-blue-500
 												border border-gray-700 p-1 rounded-md cursor-pointer"
-						>
-							Повторить
-						</button>
-					</div>
-				</div>
+            >
+              Повторить
+            </button>
+          </div>
+        </div>
       ) : !mySets ? (
-        <span className="flex justify-center items-center text-gray-400 h-full w-full">{isLoading ? "Загрузка..." : "Пусто"}</span>
+        <span className="flex justify-center items-center text-gray-400 h-full w-full">
+          {isLoading ? "Загрузка..." : "Пусто"}
+        </span>
       ) : (
-          <div className="w-full grid grid-cols-auto gap-2 md:gap-4">
-            {mySets?.map((el) => <Set key={el.id} {...el} />)}</div>
+        <div className="w-full grid grid-cols-auto gap-2 md:gap-4">
+          {mySets?.map((el) => (
+            <Set key={el.id} {...el} />
+          ))}
+        </div>
       )}
       <div className="absolute top-[50] left-[-50]">
         <button
@@ -52,7 +56,9 @@ export default function MySetsContainer() {
           />
         </button>
 
-        {openPopUpAdding && <PopUpAddingSets onSuccess={() => setOpenPopUpAdding(false)}/>}
+        {openPopUpAdding && (
+          <PopUpAddingSets onSuccess={() => setOpenPopUpAdding(false)} />
+        )}
       </div>
     </div>
   );
