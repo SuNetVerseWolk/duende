@@ -11,7 +11,7 @@ export default function UserSetItem() {
   const params = useParams();
   const id = params?.id as string;
   
-  const { data, isLoading: setIsLoading, isPaused } = useSet(id);
+  const { data, isLoading: setIsLoading, isPaused, isError, error } = useSet(id);
   const isLoading = useMemo(
     () => !id || setIsLoading || isPaused,
     [id, setIsLoading, isPaused]
@@ -86,6 +86,9 @@ export default function UserSetItem() {
 
   if (isLoading || !formData) {
     return <div className="text-white flex flex-col gap-3 sm:gap-4 bg-white/5 p-4 sm:p-5 md:p-6 rounded-2xl my-4 sm:my-5">Загружается...</div>;
+  }
+	if (isError) {
+    return <div className="text-white flex flex-col gap-3 sm:gap-4 bg-white/5 p-4 sm:p-5 md:p-6 rounded-2xl my-4 sm:my-5">{error.message}	</div>;
   }
 
   return (

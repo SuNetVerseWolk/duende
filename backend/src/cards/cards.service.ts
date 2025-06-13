@@ -36,23 +36,13 @@ export class CardsService {
     }
 
     const cards = await this.prisma.cards.findMany({
-      where,
-      include: {
-        Sets: {
-          select: {
-            id: true,
-            name: true,
-            privacy: true,
-          },
-        },
-      },
+      where
     });
 
     return cards.map((card) => ({
       ...card,
       id: card.id.toString(),
-      id_set: card.id_set?.toString(),
-      Sets: { ...card.Sets, id: card.Sets?.id.toString() },
+      id_set: card.id_set?.toString()
     }));
   }
 
