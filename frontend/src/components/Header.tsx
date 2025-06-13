@@ -42,18 +42,18 @@ const Header = () => {
           </Link>
           {user ? (
             <Link
-              className="cursor-pointer flex flex-row gap-2 items-center"
+              className="cursor-pointer flex flex-row gap-2 items-center rounded-full"
               href={`/user/${user.id}`}
             >
               <Image
-                className={`w-10 h-10 filter ${profile?.avatar ? '' : 'invert'}`}
+                className={`w-10 h-10 filter rounded-full ${profile?.avatar ? '' : 'invert'}`}
                 src={profile?.avatar || "/userIcon.png"}
                 alt="User Icon"
 								width={40}
 								height={40}
               />
 
-              <p className="text-white font-semibold hide-on-small text-[9px] sm:text-base md:text-[10px] lg:text-[12px]">
+              <p className="text-white font-semibold text-[11px] sm:text-base md:text-[10px] lg:text-[12px]">
                 {profile?.name == null ? user.email: profile?.name}
               </p>
             </Link>

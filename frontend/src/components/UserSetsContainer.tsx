@@ -25,7 +25,7 @@ export default function UserSetsContainer() {
                     bg-white/5 w-fit rounded-t-lg p-1 mt-2 cursor-pointer"
                 >
                   <Image
-                    className={`w-10 h-10 filter ${
+                    className={`w-10 h-10 filter rounded-full ${
                       profile?.avatar ? "" : "invert"
                     }`}
                     src={profile?.avatar || "/userIcon.png"}
