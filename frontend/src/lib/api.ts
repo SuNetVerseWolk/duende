@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Cards, profiles, Sets } from "../../generated/prisma";
+import { supabase } from "./supabaseClient";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3000";
 
@@ -7,6 +8,64 @@ const api = axios.create({
   baseURL: API_BASE_URL,
   withCredentials: true,
 });
+
+api.interceptors.request.use(async (config) => {
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.access_token) {
+      config.headers.Authorization = `Bearer ${session.access_token}`;
+    }
+    return config;
+  } catch (error) {
+    console.error("Failed to set auth token", error);
+    throw error;
+  }
+});
+
+const handleApiError = (error: unknown, defaultMessage: string) => {
+  if (axios.isAxiosError(error)) {
+    throw new Error(error.response?.data?.message || defaultMessage);
+  }
+  throw new Error(defaultMessage);
+};
+
+const updateProfile = async (
+  id: string,
+  profileData: Partial<profiles>,
+  avatar?: File
+): Promise<profiles> => {
+  try {
+    const formData = new FormData();
+    
+    // Append profile data
+		Object.entries(profileData).forEach(([key, value]) => {
+      if (value === undefined || value === null) return;
+
+      // Handle arrays (both empty and non-empty)
+      if (Array.isArray(value) && typeof value === 'object') {
+        formData.append(key, JSON.stringify(value));
+      }
+      // Handle primitive values
+      else {
+        formData.append(key, String(value));
+      }
+    });
+    
+    // Append avatar if provided
+    if (avatar) {
+      formData.append('avatar', avatar);
+    }
+
+    const response = await api.put<profiles>(`/profiles/${id}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw handleApiError(error, `Failed to update profile with ID ${id}`);
+  }
+};
 
 //export type SetWithCount = Sets & {
 //  _count: { Cards: number };
@@ -29,8 +88,7 @@ export type WholeProfiles = profiles & {
 
 export const profileApi = {
   getMyProfile: (id: string) => api.get<profiles>(`/profiles/me/${id}`),
-  updateMyProfile: (id: string, updateProfileDto: any) =>
-    api.patch(`/profiles/me/${id}`, updateProfileDto),
+  updateMyProfile: updateProfile,
   getMySets: (id: string) => api.get<SetWithCards[]>(`/profiles/me/${id}/sets`),
 	getAllProfiles: () => api.get<WholeProfiles[]>(`/profiles/all`),
   getUserSets: (userId: string) => api.get<Sets[]>(`/profiles/${userId}/sets`),

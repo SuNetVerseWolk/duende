@@ -42,7 +42,7 @@ export const useUpdateProfile = () => {
   const userId = useUserId();
   
   return useMutation({
-    mutationFn: (updateProfileDto: any) => profileApi.updateMyProfile(userId!, updateProfileDto),
+    mutationFn: (updateProfileDto: any, avatar?: File) => profileApi.updateMyProfile(userId!, updateProfileDto, avatar),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['profile', userId] });
     },
