@@ -5,20 +5,23 @@ import { useMySets, useProfile, useUser } from "@/hooks/useAuth";
 import { Set } from "@/components/Set";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/lib/supabaseClient";
 
 const Page = () => {
+    const queryClient = useQueryClient();
     const { data: user, isLoading: userIsLoading } = useUser();
     const { data: profile, isLoading: profileIsLoading } = useProfile();
     const { data: mySets, isLoading, isError, error, refetch } = useMySets();
     const router = useRouter();
 
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        
-        router.push("/logIn");
-        router.refresh();
-    };
+		const { mutate: signOut } = useMutation({
+			mutationFn: async (e: any) => await supabase.auth.signOut(),
+			onSuccess() {
+				queryClient.resetQueries();
+				router.replace("/");
+			},
+		});
 
     return (
         <div className="flex justify-center min-h-screen bg-gradient-to-r from-black via-[#1f2834] to-black px-4">
@@ -68,7 +71,7 @@ const Page = () => {
                             </button>
                             <button
                                 type="button"
-                                onClick={handleLogout}
+                                onClick={signOut}
                                 className="text-white font-semibold bg-blue-600 hover:bg-blue-700 
                                     transition-colors duration-300 shadow-md focus:outline-none 
                                     focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 
