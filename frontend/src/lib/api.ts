@@ -63,7 +63,7 @@ export const cardsApi = {
     api.get<SetWithCards>(`/cards/set/${setId}/by/${userId}`),
   findOne: (id: bigint, userId: string) =>
     api.get<Cards>(`/cards/${id}/by/${userId}`),
-  update: (id: bigint, userId: string, updateCardDto: any) =>
+  update: (id: bigint, userId: string, updateCardDto: Omit<Cards, 'id' | 'created_at'>) =>
     api.patch(`/cards/${id}/by/${userId}`, updateCardDto),
   remove: (id: bigint, userId: string) =>
     api.delete(`/cards/${id}/by/${userId}`),

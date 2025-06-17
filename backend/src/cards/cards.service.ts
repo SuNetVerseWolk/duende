@@ -15,13 +15,15 @@ export class CardsService {
       await this.verifySetOwnership(createCardDto.id_set, userId);
     }
 
-    return this.prisma.cards.create({
+    const card = await this.prisma.cards.create({
       data: {
         text: createCardDto.text,
         translation: createCardDto.translation,
         id_set: createCardDto.id_set,
       },
     });
+
+    return { ...card, id_set: card.id_set?.toString() };
   }
 
   async findAllForSet(setId: bigint, userId?: string) {
@@ -37,22 +39,12 @@ export class CardsService {
 
     const cards = await this.prisma.cards.findMany({
       where,
-      include: {
-        Sets: {
-          select: {
-            id: true,
-            name: true,
-            privacy: true,
-          },
-        },
-      },
     });
 
     return cards.map((card) => ({
       ...card,
       id: card.id.toString(),
       id_set: card.id_set?.toString(),
-      Sets: { ...card.Sets, id: card.Sets?.id.toString() },
     }));
   }
 
