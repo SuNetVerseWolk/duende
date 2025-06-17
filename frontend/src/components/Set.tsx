@@ -12,16 +12,16 @@ export const Set: React.FC<SetWithCards> = ({ ...data }) => {
           transform transition-transform duration-500 hover:scale-105
           hover:border-b-4 hover:border-b-blue-500
           border border-gray-700 p-4 rounded-md cursor-pointer
-          h-auto min-h-[6rem]
+          h-auto
           flex flex-col justify-between
-          sm:p-3 sm:min-h-[5.5rem]
+          sm:p-3 sm:min-h-[2.5rem]
           md:p-4 md:min-h-[6rem]
           lg:p-5 lg:min-h-[7rem]
         "
       >
-        <h2 className="text-lg sm:text-base md:text-lg lg:text-xl font-semibold">{data.name}</h2>
+        <h2 className=" sm:text-[7] md:text-lg lg:text-xl font-semibold">{data.name}</h2>
 
-        <p className="text-sm sm:text-[9] md:text-sm lg:text-base">Карточек: {data._count.Cards}</p>
+        <p className="text-[13px] sm:text-sm md:text-md lg:text-base">Карточек: {data._count.Cards}</p>
     </Link>
   )
 }
