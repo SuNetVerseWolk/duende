@@ -6,8 +6,8 @@ import { Set } from "@/components/Set";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/lib/supabaseClient";
 import Warn from "@/components/Warn";
+import { supabase, supabaseAdmin } from "@/lib/supabaseClient";
 
 const Page = () => {
     const queryClient = useQueryClient();
@@ -69,6 +69,15 @@ const Page = () => {
         setWarnVisible(false);
         setWarnAction(null);
     };
+
+		const { mutate: deleteUser } = useMutation({
+			mutationFn: async (e: any) =>
+				await supabaseAdmin.auth.admin.deleteUser(user!.id),
+			onSuccess() {
+				queryClient.resetQueries();
+				router.replace("/");
+			},
+		});
 
     return (
         <div className="flex justify-center min-h-screen bg-gradient-to-r from-black via-[#1f2834] to-black px-4">
@@ -137,7 +146,7 @@ const Page = () => {
                             </button>
                             <button
                                 type="button"
-                                onClick={() => openWarn("deleteAccount")}
+                                onClick={deleteUser}
                                 className="text-white font-semibold bg-red-600 hover:bg-red-700 
                                     transition-colors duration-300 shadow-md focus:outline-none 
                                     focus:ring-2 focus:ring-red-500 focus:ring-offset-2 
