@@ -6,7 +6,7 @@ import { Set } from "@/components/Set";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/lib/supabaseClient";
+import { supabase, supabaseAdmin } from "@/lib/supabaseClient";
 
 const Page = () => {
     const queryClient = useQueryClient();
@@ -17,6 +17,15 @@ const Page = () => {
 
 		const { mutate: signOut } = useMutation({
 			mutationFn: async (e: any) => await supabase.auth.signOut(),
+			onSuccess() {
+				queryClient.resetQueries();
+				router.replace("/");
+			},
+		});
+
+		const { mutate: deleteUser } = useMutation({
+			mutationFn: async (e: any) =>
+				await supabaseAdmin.auth.admin.deleteUser(user!.id),
 			onSuccess() {
 				queryClient.resetQueries();
 				router.replace("/");
@@ -82,6 +91,7 @@ const Page = () => {
                             </button>
                             <button
                                 type="button"
+                                onClick={deleteUser}
                                 className="text-white font-semibold bg-red-600 hover:bg-red-700 
                                     transition-colors duration-300 shadow-md focus:outline-none 
                                     focus:ring-2 focus:ring-red-500 focus:ring-offset-2 
