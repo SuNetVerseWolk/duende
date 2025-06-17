@@ -1,12 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useMySets, useProfile, useUser } from "@/hooks/useAuth";
 import { Set } from "@/components/Set";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabaseClient";
+import Warn from "@/components/Warn";
 
 const Page = () => {
     const queryClient = useQueryClient();
@@ -15,16 +16,70 @@ const Page = () => {
     const { data: mySets, isLoading, isError, error, refetch } = useMySets();
     const router = useRouter();
 
-		const { mutate: signOut } = useMutation({
-			mutationFn: async (e: any) => await supabase.auth.signOut(),
-			onSuccess() {
-				queryClient.resetQueries();
-				router.replace("/");
-			},
-		});
+    const [warnVisible, setWarnVisible] = useState(false);
+    const [warnText, setWarnText] = useState("");
+    const [warnAction, setWarnAction] = useState<"signOut" | "deleteAccount" | null>(null);
+
+    useEffect(() => {
+        if (warnVisible) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+        }
+        
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [warnVisible]);
+
+    const { mutate: signOut } = useMutation({
+        mutationFn: async () => await supabase.auth.signOut(),
+        onSuccess() {
+            queryClient.resetQueries();
+            router.replace("/");
+        },
+    });
+
+    const { mutate: deleteAccount } = useMutation({
+        mutationFn: async () => {
+            await supabase.auth.signOut();
+        },
+        onSuccess() {
+            queryClient.resetQueries();
+            router.replace("/");
+        },
+    });
+
+    const openWarn = (action: "signOut" | "deleteAccount") => {
+        setWarnAction(action);
+        setWarnText(action === "signOut" ? "Вы действительно хотите выйти?" : "Вы хотите удалить аккаунт?");
+        setWarnVisible(true);
+    };
+
+    const onConfirm = () => {
+        setWarnVisible(false);
+        if (warnAction === "signOut") {
+            signOut();
+        } else if (warnAction === "deleteAccount") {
+            deleteAccount();
+        }
+    };
+
+    const onCancel = () => {
+        setWarnVisible(false);
+        setWarnAction(null);
+    };
 
     return (
         <div className="flex justify-center min-h-screen bg-gradient-to-r from-black via-[#1f2834] to-black px-4">
+            {warnVisible && (
+                <Warn
+                    text={warnText}
+                    onConfirm={onConfirm}
+                    onCancel={onCancel}
+                />
+            )}
+
             <div className="w-lg h-full">
                 <form className="flex flex-row flex-wrap justify-center max-w-2xl mx-auto gap-3 sm:gap-4 bg-white/5 p-4 sm:p-5 md:p-6 rounded-2xl my-4 sm:my-5">
                     <div className="cursor-pointer">
@@ -71,7 +126,7 @@ const Page = () => {
                             </button>
                             <button
                                 type="button"
-                                onClick={signOut}
+                                onClick={() => openWarn("signOut")}
                                 className="text-white font-semibold bg-blue-600 hover:bg-blue-700 
                                     transition-colors duration-300 shadow-md focus:outline-none 
                                     focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 
@@ -82,6 +137,7 @@ const Page = () => {
                             </button>
                             <button
                                 type="button"
+                                onClick={() => openWarn("deleteAccount")}
                                 className="text-white font-semibold bg-red-600 hover:bg-red-700 
                                     transition-colors duration-300 shadow-md focus:outline-none 
                                     focus:ring-2 focus:ring-red-500 focus:ring-offset-2 
@@ -110,7 +166,7 @@ const Page = () => {
                             <div className="flex flex-col justify-center items-center text-gray-400 space-y-1">
                                 <p>{error.message}</p>
                                 <button
-                                    onClick={(e) => refetch()}
+                                    onClick={() => refetch()}
                                     className="bg-black bg-opacity-90 shadow-2xl text-white
                                                                 transform transition-transform duration-500 hover:scale-105
                                                                 hover:border-b-4 hover:border-b-blue-500
@@ -134,3 +190,4 @@ const Page = () => {
 };
 
 export default Page;
+
