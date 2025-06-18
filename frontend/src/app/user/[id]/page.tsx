@@ -157,13 +157,13 @@ const Page = () => {
                                     focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 
                                     py-1.5 sm:py-2 px-4 rounded-sm text-sm sm:text-base flex-1 text-center
                                     disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Выйти
-              </button>
-              <button
-                type="button"
-                onClick={deleteUser}
-                className="text-white font-semibold bg-red-600 hover:bg-red-700 
+                            >
+                                Выйти
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => openWarn("deleteAccount")}
+                                className="text-white font-semibold bg-red-600 hover:bg-red-700
                                     transition-colors duration-300 shadow-md focus:outline-none 
                                     focus:ring-2 focus:ring-red-500 focus:ring-offset-2 
                                     py-1.5 sm:py-2 px-4 rounded-sm text-sm sm:text-base flex-1 text-center
