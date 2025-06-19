@@ -6,21 +6,56 @@ import {
   useProfile,
   useUpdateProfile,
   useUser,
+  useUserSets,
 } from "@/hooks/useAuth";
 import { Set } from "@/components/Set";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useParams, useRouter } from "next/navigation";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Warn from "@/components/Warn";
 import { supabase, supabaseAdmin } from "@/lib/supabaseClient";
+import { useUserEmail } from "@/hooks/useUserEmail";
+import Link from "next/link";
 
 const Page = () => {
-  const queryClient = useQueryClient();
-  const router = useRouter();
-  const { data: user, isLoading: userIsLoading } = useUser();
-  const { data: profile, isLoading: profileIsLoading } = useProfile();
-  const { mutate: updateProfile } = useUpdateProfile();
-  const { data: mySets, isLoading, isError, error, refetch } = useMySets();
+    const queryClient = useQueryClient();
+    const router = useRouter();
+    const { data: user, isLoading: userIsLoading } = useUser();
+    //   const { data: profile, isLoading: profileIsLoading } = useProfile();
+    const { mutate: updateProfile } = useUpdateProfile();
+      const { data: mySets, isLoading, isError, error, refetch } = useMySets();
+
+    const params = useParams();
+    const userId = params?.id as string;
+
+    const { data: profile, isLoading: profileIsLoading } = useQuery({
+        queryKey: ["profile", userId],
+        queryFn: async () => {
+        const { data, error } = await supabase
+            .from("profiles")
+            .select("*")
+            .eq("id", userId)
+            .single();
+        if (error) throw error;
+        return data;
+        },
+        enabled: !!userId,
+    });
+
+    const { data: email, isLoading: emailLoading, error: emailError } = useUserEmail(userId);
+
+    // const { data: userSets, isLoading, isError, error, refetch } = useQuery({
+    //     queryKey: ["userSets", userId],
+    //     queryFn: async () => {
+    //     const { data, error } = await supabase
+    //         .from("Sets")
+    //         .select("*")
+    //         .eq("id", userId);
+    //         if (error) throw error;
+    //         return data;
+    //     },
+    //     enabled: !!userId  && !!profile,
+        // });
 
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [warnVisible, setWarnVisible] = useState(false);
@@ -28,6 +63,8 @@ const Page = () => {
   const [warnAction, setWarnAction] = useState<
     "signOut" | "deleteAccount" | null
   >(null);
+
+  console.log(profile?.id);
 
   useEffect(() => {
     if (warnVisible) {
@@ -101,32 +138,35 @@ const Page = () => {
 
       <div className="w-lg h-full">
         <form className="flex flex-row flex-wrap justify-center max-w-2xl mx-auto gap-3 sm:gap-4 bg-white/5 p-4 sm:p-5 md:p-6 rounded-2xl my-4 sm:my-5">
-          <div className="relative cursor-pointer">
+          <div className="relative w-10 h-10">
             <Image
-              className={`w-10 h-10 filter ${profile?.avatar ? "" : "invert"}`}
+              className={`w-full filter rounded-full ${profile?.avatar ? "" : "invert"}`}
               src={profile?.avatar || "/userIcon.png"}
               alt="User Icon"
               width={40}
               height={40}
             />
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="absolute inset-0 opacity-0 cursor-pointer"
-            />
+            {user?.id === profile?.id && (
+                <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="absolute inset-0 opacity-0 cursor-pointer h-full"
+                />
+            )}
           </div>
-          <div className="flex flex-col gap-3 sm:gap-4 ">
+          <div className="flex flex-col gap-3 sm:gap-4 md:w-[300px]">
             <input
               name="email"
               className="w-full px-3 sm:px-4 py-2 text-white bg-gray-700/90 border border-gray-600 rounded-lg
                                         focus:border-white focus:ring-2 focus:ring-white focus:outline-none
                                         transition-colors duration-300 placeholder-gray-400 text-sm sm:text-base"
-              placeholder={userIsLoading ? "Загрузка..." : "Email"}
-              defaultValue={user?.email}
+              placeholder={emailLoading ? "Загрузка..." : "Email"}
+              defaultValue={email}
               required
               minLength={2}
               maxLength={100}
+              disabled={user?.id !== profile?.id}
             />
             <input
               name="name"
@@ -134,56 +174,61 @@ const Page = () => {
                                         focus:border-white focus:ring-2 focus:ring-white focus:outline-none
                                         transition-colors duration-300 placeholder-gray-400 text-sm sm:text-base"
               placeholder={profileIsLoading ? "Загрузка..." : "Имя"}
-              defaultValue={profile?.name ? profile.name : ""}
+              defaultValue={profile?.name ? profile.name : "Без имени"}
               maxLength={500}
+              disabled={user?.id !== profile?.id}
             />
 
-            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-1">
-              <button
-                type="submit"
-                className="text-white font-semibold bg-blue-600 hover:bg-blue-700 
-                                    transition-colors duration-300 shadow-md focus:outline-none 
-                                    focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 
-                                    py-1.5 sm:py-2 px-4 rounded-sm text-sm sm:text-base flex-1 text-center
-                                    disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Изменить
-              </button>
-              <button
-                type="button"
-                onClick={() => openWarn("signOut")}
-                className="text-white font-semibold bg-blue-600 hover:bg-blue-700 
-                                    transition-colors duration-300 shadow-md focus:outline-none 
-                                    focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 
-                                    py-1.5 sm:py-2 px-4 rounded-sm text-sm sm:text-base flex-1 text-center
-                                    disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                Выйти
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => openWarn("deleteAccount")}
-                                className="text-white font-semibold bg-red-600 hover:bg-red-700
-                                    transition-colors duration-300 shadow-md focus:outline-none 
-                                    focus:ring-2 focus:ring-red-500 focus:ring-offset-2 
-                                    py-1.5 sm:py-2 px-4 rounded-sm text-sm sm:text-base flex-1 text-center
-                                    disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Удалить
-              </button>
-            </div>
+            {user?.id === profile?.id && (
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-1">
+                    <button
+                        type="submit"
+                        className="text-white font-semibold bg-blue-600 hover:bg-blue-700 
+                                            transition-colors duration-300 shadow-md focus:outline-none 
+                                            focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 
+                                            py-1.5 sm:py-2 px-4 rounded-sm text-sm sm:text-base flex-1 text-center
+                                            disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        Изменить
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => openWarn("signOut")}
+                        className="text-white font-semibold bg-blue-600 hover:bg-blue-700 
+                                            transition-colors duration-300 shadow-md focus:outline-none 
+                                            focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 
+                                            py-1.5 sm:py-2 px-4 rounded-sm text-sm sm:text-base flex-1 text-center
+                                            disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        Выйти
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => openWarn("deleteAccount")}
+                                        className="text-white font-semibold bg-red-600 hover:bg-red-700
+                                            transition-colors duration-300 shadow-md focus:outline-none 
+                                            focus:ring-2 focus:ring-red-500 focus:ring-offset-2 
+                                            py-1.5 sm:py-2 px-4 rounded-sm text-sm sm:text-base flex-1 text-center
+                                            disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        Удалить
+                    </button>
+                </div>
+            )}
           </div>
         </form>
 
-        <button
-          className="text-white font-semibold bg-blue-900 hover:bg-blue-700 
-                                transition-colors duration-300 shadow-md focus:outline-none w-full
-                                focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 
-                                py-1.5 sm:py-2 px-4 rounded-sm text-sm sm:text-base flex-1 text-center
-                                disabled:opacity-50 disabled:cursor-not-allowed my-2"
-        >
-          Добавить набор
-        </button>
+        {user?.id === profile?.id && (
+            <button
+            className="text-white font-semibold bg-blue-900 hover:bg-blue-700 
+                                    transition-colors duration-300 shadow-md focus:outline-none w-full
+                                    focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 
+                                    py-1.5 sm:py-2 px-4 rounded-sm text-sm sm:text-base flex-1 text-center
+                                    disabled:opacity-50 disabled:cursor-not-allowed my-2"
+            >
+            Добавить набор
+            </button>
+        )}
 
         <div className="flex flex-col bg-white/5 p-5 min-h-50 rounded-2xl overflow-auto">
           {isError ? (
@@ -219,3 +264,4 @@ const Page = () => {
 };
 
 export default Page;
+

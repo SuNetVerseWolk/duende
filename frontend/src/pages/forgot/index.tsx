@@ -31,7 +31,7 @@ export default function ForgotPassword() {
                transform transition-transform duration-500
                border border-gray-700 sm:p-3 md:p-4 rounded-xl
                w-full max-w-md mx-auto p-8 mt-15">
-        <h1 className="text-2xl font-bold mb-4">Забыл пароль</h1>
+        <h1 className="text-2xl font-bold mb-4">Забыли пароль</h1>
         <form onSubmit={handleReset} className="space-y-4">
           <div>
             <label htmlFor="email" className="block mb-1">E-mail</label>

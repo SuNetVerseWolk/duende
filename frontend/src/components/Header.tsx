@@ -43,7 +43,7 @@ const Header = () => {
           {user ? (
             <Link
               className="cursor-pointer flex flex-row gap-2 items-center rounded-full"
-              href={`/user/${user.id}`}
+              href={`/user/${user?.id}`}
             >
               <Image
                 className={`w-10 h-10 filter rounded-full ${profile?.avatar ? '' : 'invert'}`}

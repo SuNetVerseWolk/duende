@@ -3,6 +3,9 @@ import "../app/globals.css";
 import { useWholeProfiles } from "@/hooks/useAuth";
 import Image from "next/image";
 import Link from "next/link";
+import { useUserEmail } from "@/hooks/useUserEmail";
+import { profile } from "console";
+import { useParams } from "next/navigation";
 
 export default function UserSetsContainer() {
   const { data, isLoading } = useWholeProfiles();
@@ -35,7 +38,7 @@ export default function UserSetsContainer() {
                   />
                   {/*<div className="rounded-full w-7 h-7 bg-blue-900"></div>*/}
 
-                  <h2 className="px-2 py-1.5">{profile.name || "Безымяный"}</h2>
+                  <h2 className="px-2 py-1.5">{profile.name || "Без имени"}</h2>
                 </Link>
 
                 <div
