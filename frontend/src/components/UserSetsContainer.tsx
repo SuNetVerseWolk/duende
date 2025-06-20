@@ -1,6 +1,6 @@
 import { Set } from "./Set";
 import "../app/globals.css";
-import { useWholeProfiles } from "@/hooks/useAuth";
+import { useUser, useWholeProfiles } from "@/hooks/useAuth";
 import Image from "next/image";
 import Link from "next/link";
 import { useUserEmail } from "@/hooks/useUserEmail";
@@ -9,6 +9,7 @@ import { useParams } from "next/navigation";
 
 export default function UserSetsContainer() {
   const { data, isLoading } = useWholeProfiles();
+  const { data: user, isLoading: userIsLoading } = useUser();
 
   return (
     <div className="h-[100%] overflow-y-scroll no-scrollbar border-white/5 border-1 px-4 rounded-2xl">
@@ -38,7 +39,7 @@ export default function UserSetsContainer() {
                   />
                   {/*<div className="rounded-full w-7 h-7 bg-blue-900"></div>*/}
 
-                  <h2 className="px-2 py-1.5">{profile.name || "Без имени"}</h2>
+                  <h2 className="px-2 py-1.5">{profile?.name || user?.email}</h2>
                 </Link>
 
                 <div

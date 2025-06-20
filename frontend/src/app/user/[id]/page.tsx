@@ -23,10 +23,12 @@ const Page = () => {
     const { data: user, isLoading: userIsLoading } = useUser();
     //   const { data: profile, isLoading: profileIsLoading } = useProfile();
     const { mutate: updateProfile } = useUpdateProfile();
-      const { data: mySets, isLoading, isError, error, refetch } = useMySets();
+    // const { data: mySets, isLoading, isError, error, refetch } = useMySets();
 
     const params = useParams();
     const userId = params?.id as string;
+    
+    const { data: userSets, error, isLoading: isloadingSet, refetch} = useUserSets(userId);
 
     const { data: profile, isLoading: profileIsLoading } = useQuery({
         queryKey: ["profile", userId],
@@ -231,7 +233,7 @@ const Page = () => {
         )}
 
         <div className="flex flex-col bg-white/5 p-5 min-h-50 rounded-2xl overflow-auto">
-          {isError ? (
+          {error ? (
             <div className="flex justify-center items-center">
               <div className="flex flex-col justify-center items-center text-gray-400 space-y-1">
                 <p>{error.message}</p>
@@ -246,14 +248,16 @@ const Page = () => {
                 </button>
               </div>
             </div>
-          ) : !mySets ? (
+          ) : !userSets ? (
             <span className="flex justify-center items-center text-gray-400 h-full w-full">
-              {isLoading ? "Загрузка" : "Пусто"}
+              {isloadingSet ? "Загрузка" : "Пусто"}
             </span>
           ) : (
             <div className="w-full grid grid-cols-1 gap-2">
-              {mySets?.map((el) => (
-                <Set key={el.id} {...el} />
+              {userSets?.map((el) => (
+                <Set _count={{
+                      Cards: 0
+                  }} key={el.id} {...el} />
               ))}
             </div>
           )}
