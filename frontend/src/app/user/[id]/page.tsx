@@ -15,7 +15,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Warn from "@/components/Warn";
 import { supabase, supabaseAdmin } from "@/lib/supabaseClient";
 import { useUserEmail } from "@/hooks/useUserEmail";
-import Link from "next/link";
 
 const Page = () => {
     const queryClient = useQueryClient();
@@ -128,7 +127,9 @@ const Page = () => {
         id: user!.id,
         data: {},
         avatar: e.target.files[0],
-      });
+      }, {
+				onSuccess: () => setSelectedImage(null)
+			});
     }
   };
 
@@ -143,7 +144,7 @@ const Page = () => {
           <div className="relative w-10 h-10">
             <Image
               className={`w-full filter rounded-full ${profile?.avatar ? "" : "invert"}`}
-              src={profile?.avatar || "/userIcon.png"}
+              src={selectedImage || profile?.avatar || "/userIcon.png"}
               alt="User Icon"
               width={40}
               height={40}

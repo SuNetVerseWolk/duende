@@ -105,10 +105,10 @@ export const setsApi = {
     api.patch<Sets>(`/sets/${userId}/${id}`, updateSetDto),
   remove: (id: bigint, userId: string) =>
     api.delete<void>(`/sets/${userId}/${id}`),
-  //findByUser: (profileId: string, includePrivate: boolean = false) =>
-  //  api.get<SetWithCount[]>(`/sets/user/${profileId}`, {
-  //    params: { includePrivate },
-  //  }),
+  findByUser: (profileId: string, includePrivate: boolean = false) =>
+    api.get<SetWithCards[]>(`/sets/user/${profileId}`, {
+      params: { includePrivate },
+    }),
 };
 
 export const cardsApi = {

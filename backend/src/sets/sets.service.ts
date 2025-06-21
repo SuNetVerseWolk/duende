@@ -30,6 +30,7 @@ export class SetsService {
     const where: any = {};
 
     if (userId) {
+			console.log(userId)
       where.OR = [{ privacy: false }, { id_profile: userId }];
     } else {
       where.privacy = false;
@@ -54,6 +55,7 @@ export class SetsService {
         },
       },
     });
+		console.log(sets)
 
     // Filter out sets without profiles and group by profile name
     const groupedResult = sets.reduce(
