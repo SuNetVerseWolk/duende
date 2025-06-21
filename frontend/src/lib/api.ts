@@ -91,7 +91,7 @@ export const profileApi = {
   updateMyProfile: updateProfile,
   getMySets: (id: string) => api.get<SetWithCards[]>(`/profiles/me/${id}/sets`),
 	getAllProfiles: () => api.get<WholeProfiles[]>(`/profiles/all`),
-  getUserSets: (userId: string) => api.get<Sets[]>(`/profiles/${userId}/sets`),
+  //getUserSets: (userId: string) => api.get<Sets[]>(`/profiles/${userId}/sets`),
 };
 
 export const setsApi = {
