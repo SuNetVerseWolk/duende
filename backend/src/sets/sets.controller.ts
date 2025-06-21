@@ -89,9 +89,7 @@ export class SetsController {
 
   @Get('user/:userId')
   async findByUser(
-    @Param('userId') userId: string,
-    @Query('includePrivate') includePrivate: boolean,
-    @Req() req?: any,
+    @Param('userId') userId: string
   ) {
     return this.setsService.findAll(userId);
   }

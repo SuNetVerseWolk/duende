@@ -106,9 +106,7 @@ export const setsApi = {
   remove: (id: bigint, userId: string) =>
     api.delete<void>(`/sets/${userId}/${id}`),
   findByUser: (profileId: string, includePrivate: boolean = false) =>
-    api.get<SetWithCards[]>(`/sets/user/${profileId}`, {
-      params: { includePrivate },
-    }),
+    api.get<SetWithCards[]>(`/sets/user/${profileId}`),
 };
 
 export const cardsApi = {
