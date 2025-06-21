@@ -93,8 +93,6 @@ export class SetsController {
     @Query('includePrivate') includePrivate: boolean,
     @Req() req?: any,
   ) {
-    // Only allow viewing private sets if the requesting user is the owner
-    const allowPrivate = req?.user?.id === userId;
-    return this.setsService.findAll(allowPrivate ? userId : undefined);
+    return this.setsService.findAll(userId);
   }
 }

@@ -26,12 +26,12 @@ export class SetsService {
     };
   }
 
-  async findAll(userId?: string) {
+  async findAll(userId?: string, includePrivate?: boolean) {
     const where: any = {};
 
     if (userId) {
 			console.log(userId)
-      where.OR = [{ privacy: false }, { id_profile: userId }];
+      where.OR = [includePrivate ? { privacy: false } : {}, { id_profile: userId }];
     } else {
       where.privacy = false;
     }
