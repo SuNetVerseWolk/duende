@@ -22,16 +22,16 @@ export const useSet = (id: string) => {
   });
 };
 
-//export const useUserSets = (userId?: string, includePrivate = false) => {
-//  const currentUserId = useUserId();
-//  const targetUserId = userId || currentUserId;
+export const useUserSets = (userId?: string, includePrivate = false) => {
+  const currentUserId = useUserId();
+  const targetUserId = userId || currentUserId;
   
-//  return useQuery<SetWithCount[]>({
-//    queryKey: ['userSets', targetUserId, includePrivate],
-//    queryFn: () => setsApi.findByUser(targetUserId!, includePrivate).then(res => res.data),
-//    enabled: !!targetUserId,
-//  });
-//};
+  return useQuery<SetWithCards[]>({
+    queryKey: ['userSets', targetUserId, includePrivate],
+    queryFn: () => setsApi.findByUser(targetUserId!, includePrivate).then(res => res.data),
+    enabled: !!targetUserId,
+  });
+};
 
 export const useCreateSet = () => {
   const queryClient = useQueryClient();

@@ -27,8 +27,8 @@ export const useUserId = () => {
 };
 
 // Profile hooks
-export const useProfile = () => {
-  const userId = useUserId();
+export const useProfile = (id?: string) => {
+  const userId = id || useUserId();
   
   return useQuery({
     queryKey: ['profile', userId],
