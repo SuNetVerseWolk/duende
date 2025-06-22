@@ -65,7 +65,7 @@ export const useUserSets = (userId?: string) => {
   const currentUserId = useUserId();
 	
 	if (currentUserId === userId || !userId) {
-		return useMySets;
+		return useMySets();
 	}
   
   return useQuery<SetWithCards[]>({
