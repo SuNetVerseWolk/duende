@@ -21,7 +21,7 @@ export class ProfilesService {
       include: {
         Sets: {
           orderBy: {
-            created_at: 'desc',
+            name: 'asc',
           },
           include: {
             Cards: true,
