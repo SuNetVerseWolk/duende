@@ -76,18 +76,28 @@ export default function UserSetItem() {
   };
 
   const handleDelete = async () => {
-    if (!formData?.id) return;
-    if (!confirm("Вы уверены, что хотите удалить этот набор?")) return;
+  if (!formData?.id) return;
+  
+  // Use a more styled confirmation dialog if available in your UI library
+  const confirmed = window.confirm("Вы уверены, что хотите удалить этот набор?");
+  if (!confirmed) return;
 
-    try {
-      await deleteSetMutation.mutateAsync(formData.id);
-      toast.success("Набор успешно удален");
-      router.back();
-    } catch (error) {
-      toast.error("Ошибка при удалении набора");
-      console.error("Delete error:", error);
+  try {
+    await deleteSetMutation.mutateAsync(formData.id);
+    toast.success("Набор успешно удален");
+    
+    // Better navigation - go to a specific route instead of back()
+    router.back(); // or wherever your sets list is
+  } catch (error) {
+    toast.error("Ошибка при удалении набора");
+    console.error("Delete error:", error);
+    
+    // More specific error messages
+    if (error instanceof Error) {
+      toast.error(`Ошибка: ${error.message}`);
     }
-  };
+  }
+};
 
   const isSubmitting = updateSetMutation.isPending;
   const isDeleting = deleteSetMutation.isPending;
