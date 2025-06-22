@@ -30,9 +30,9 @@ button {
 h1 {font-size: 32px ;}
 h2 {font-size: 20px ;}
 
-/* .tsqd-parent-container {
+.tsqd-parent-container {
   display: none !important;
-} */
+}
 
 @media (max-width: 430px) {
   .hide-on-small {
