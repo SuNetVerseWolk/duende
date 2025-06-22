@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
-import Header from "@/components/Header";
 import "./globals.css";
 import ClientVisibility from "./clientComponents/ClientVisibility";
 // import ClientVisibility from "./clientComponents/ClientVisibility";

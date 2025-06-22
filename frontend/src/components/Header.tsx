@@ -4,15 +4,24 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useMemo, useState } from "react";
 import PopUpAddingSets from "./PopUpAddiningSets";
+import { useSearch } from "@/hooks/useSearch";
 
 const Header = () => {
   const { data: user, isLoading: userIsLoading } = useUser();
   const { data: profile, isLoading: profileIsLoading } = useProfile();
+	const { setSearch, getSearch } = useSearch();
+	const [searchValue, setSearchValue] = useState(getSearch());
   const isLoading = useMemo(
     () => userIsLoading && profileIsLoading,
     [userIsLoading, profileIsLoading]
   );
   const [openPopUpAdding, setOpenPopUpAdding] = useState(false);
+
+	const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchValue(value);
+    setSearch(value);
+  };
 
   return (
     <header className="flex justify-center items-center pt-10 px-4">
@@ -27,6 +36,8 @@ const Header = () => {
             className="pl-10 pr-3 py-2 w-96 min-w-[100%] rounded-xl text-white bg-gray-700/30 border border-gray-600"
             type="text"
             placeholder="Поиск"
+            value={searchValue}
+            onChange={handleSearchChange}
           />
         </div>
 

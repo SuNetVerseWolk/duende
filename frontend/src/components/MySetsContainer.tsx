@@ -5,10 +5,16 @@ import PopUpAddingSets from "@/components/PopUpAddiningSets";
 import { useState } from "react";
 import { useMySets } from "@/hooks/useAuth";
 import "../app/globals.css";
+import { useSearch } from "@/hooks/useSearch";
 
 export default function MySetsContainer() {
   const [openPopUpAdding, setOpenPopUpAdding] = useState(false);
   const { data: mySets, isLoading, isError, error, refetch } = useMySets();
+  const { data: searchValue } = useSearch().watchSearch();
+
+  const filteredSets = mySets?.filter((set) =>
+    set.name?.toLowerCase().includes(searchValue.toLowerCase())
+  );
 
   return (
     <div className=" bg-white/5 p-5 rounded-b-2xl rounded-r-2xl h-[100%] no-scrollbar overflow-auto scroll-smooth">
@@ -27,13 +33,13 @@ export default function MySetsContainer() {
             </button>
           </div>
         </div>
-      ) : !mySets ? (
+      ) : filteredSets?.length == 0 ? (
         <span className="flex justify-center items-center text-gray-400 h-full w-full">
           {isLoading ? "Загрузка..." : "Пусто"}
         </span>
       ) : (
         <div className="w-full grid grid-cols-auto gap-2 md:gap-4">
-          {mySets?.map((el) => (
+          {filteredSets?.map((el) => (
             <Set key={el.id} {...el} />
           ))}
         </div>
