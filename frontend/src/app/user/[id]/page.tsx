@@ -26,7 +26,6 @@ const Page = () => {
   const params = useParams();
   const userId = params?.id as string;
 
-	console.log(userId == user?.id)
   const {
     data: userSets,
     error,

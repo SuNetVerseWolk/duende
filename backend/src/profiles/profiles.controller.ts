@@ -41,12 +41,11 @@ export class ProfilesController {
     return this.profilesService.getUserSets(id, true);
   }
 
-  @Get(':id/sets/privacy/:privacy')
+  @Get(':id/sets')
   getUserSets(
     @Param('id') id,
-		@Param('privacy') privacy
+    @Query('includePrivate') includePrivate: boolean = false,
   ) {
-		console.log(privacy)
-    return this.profilesService.getUserSets(id, privacy);
+    return this.profilesService.getUserSets(id, includePrivate);
   }
 }
