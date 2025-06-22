@@ -20,8 +20,9 @@ export default function UserSetItem() {
     isError,
     error,
   } = useSet(id);
+	const isMine = useMemo(() => user?.id === data?.id_profile, [user, data]);
   const isLoading = useMemo(
-    () => !id || setIsLoading || isPaused || isUserLoading,
+    () => !id || setIsLoading || isPaused || isUserLoading || !isMine,
     [id, setIsLoading, isPaused, isUserLoading]
   );
 
@@ -174,7 +175,7 @@ export default function UserSetItem() {
           </div>
         </div>
 
-        {user?.id === data?.id_profile && (
+        {isMine && (
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-1">
             <button
               type="submit"
