@@ -3,10 +3,10 @@
 import React, { useMemo, useState } from "react";
 import Card from "@/components/Card";
 import UserSetItem from "@/components/UserSetItem";
-import { useCreateCard } from "@/hooks/useCards";
+import { useCreateCard, useCardsForSet } from "@/hooks/useCards";
 import { useParams, useRouter } from "next/navigation";
 import { useUser } from "@/hooks/useAuth";
-import { useCreateSet, useSet } from "@/hooks/useSets"
+import { useCreateSet } from "@/hooks/useSets"
 import { toast } from "react-hot-toast";
 
 const Page = () => {
@@ -14,7 +14,7 @@ const Page = () => {
 	const router = useRouter();
   const setId = (params?.id ? params.id : "") as string;
   const { data: user, isLoading: isUserLoading } = useUser();
-  const { data: set, isLoading: isSetLoading, error } = useSet(setId);
+  const { data: set, isLoading: isSetLoading, error } = useCardsForSet(setId);
   const isMine = useMemo(() => user?.id === set?.id_profile, [user, set]);
   const isLoading = useMemo(
     () => isSetLoading || isUserLoading,
@@ -80,8 +80,8 @@ const Page = () => {
   };
 
   return (
-    <div className="flex justify-center min-h-screen bg-gradient-to-r from-black via-[#1f2834] to-black px-4">
-      <div className="w-lg h-full">
+    <div className="flex justify-center min-h-screen bg-gradient-to-r from-black via-[#1f2834] to-black px-4 py-8">
+      <div className="w-full max-w-4xl space-y-4">
         <UserSetItem />
 
         <button
@@ -90,25 +90,25 @@ const Page = () => {
           className="text-white font-semibold bg-blue-900 hover:bg-blue-700 
                     transition-colors duration-300 shadow-md focus:outline-none w-full
                     focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 
-                    py-1.5 sm:py-2 px-4 rounded-sm text-sm sm:text-base flex-1 text-center
-                    disabled:opacity-50 disabled:cursor-not-allowed my-2"
+                    py-2 px-4 rounded-sm text-base
+                    disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isAdding
-            ? "Добавление..."
+            ? "Processing..."
             : isMine
-            ? "Добавить карточку"
-            : "Добавить набор к себе"}
+            ? "Add Card"
+            : "Copy Set to My Collection"}
         </button>
 
-        <div className="flex flex-col bg-white/5 p-5 min-h-50 rounded-2xl overflow-auto">
+        <div className="flex flex-col bg-white/5 p-5 rounded-2xl space-y-4">
           {isLoading ? (
-            <p className="text-gray-400">Загрузка карточек...</p>
+            <p className="text-gray-400 text-center py-4">Loading cards...</p>
           ) : error ? (
             <p className="text-red-500 text-center py-4">
-              Ошибка загрузки: {error.message}
+              Error loading cards: {error.message}
             </p>
           ) : set?.Cards?.length === 0 ? (
-            <p className="text-gray-400 text-center py-4">Пусто</p>
+            <p className="text-gray-400 text-center py-4">No cards yet</p>
           ) : (
             set?.Cards?.map((card) => (
               <Card key={card.id.toString()} {...card} />

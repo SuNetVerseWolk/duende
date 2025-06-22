@@ -181,7 +181,7 @@ const Page = () => {
               required
               minLength={2}
               maxLength={100}
-              disabled={user?.id !== profile?.id}
+              disabled
             />
             <input
               name="name"
@@ -191,6 +191,7 @@ const Page = () => {
               placeholder={profileIsLoading ? "Загрузка..." : "Имя"}
               defaultValue={profile?.name ? profile.name : "Без имени"}
               maxLength={500}
+							onKeyDown={handleKeyDown}
               disabled={user?.id !== profile?.id}
             />
 
