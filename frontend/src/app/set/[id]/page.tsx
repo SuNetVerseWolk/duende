@@ -112,7 +112,7 @@ const Page = () => {
             <p className="text-gray-400 text-center py-4">Пусто</p>
           ) : (
             cards?.map((card) => (
-              <Card key={card.id.toString()} {...card} />
+              <Card key={card.id.toString()} {...card} isMine={isMine}/>
             ))
           )}
         </div>
