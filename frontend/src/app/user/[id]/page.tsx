@@ -33,7 +33,7 @@ const Page = () => {
     refetch,
   } = useUserSets(userId);
 
-  const { data: profile, isLoading: profileIsLoading } = useProfile();
+  const { data: profile, isLoading: profileIsLoading } = useProfile(userId);
 
   const {
     data: email,
