@@ -63,10 +63,10 @@ export const useMySets = () => {
   });
 };
 
-export const useUserSets = (userId: string, includePrivate?: boolean) => {
+export const useUserSets = (userId: string) => {
   return useQuery<SetWithCards[]>({
     queryKey: ["userSets", userId],
-    queryFn: () => profileApi.getUserSets(userId, includePrivate).then((res) => res.data),
+    queryFn: () => profileApi.getUserSets(userId).then((res) => res.data),
     enabled: !!userId,
   });
 };
