@@ -101,7 +101,7 @@ export default function LogIn() {
                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             disabled={isLoading}
           >
-            {isLoading ? "отправляем данные" : "Войти"}
+            {isLoading ? "Отправление данные" : "Войти"}
           </button>
         </form>
         <p className="mt-6 text-sm text-center text-gray-300">
