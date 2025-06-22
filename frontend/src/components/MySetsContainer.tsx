@@ -11,11 +11,7 @@ export default function MySetsContainer() {
   const { data: mySets, isLoading, isError, error, refetch } = useMySets();
 
   return (
-    <div
-      // className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3
-      //                   bg-white/5 p-5 rounded-b-2xl rounded-r-2xl h-[90%] overflow-auto scroll-smooth"
-      className=" bg-white/5 p-5 rounded-b-2xl rounded-r-2xl h-[100%] overflow-auto scroll-smooth"
-    >
+    <div className=" bg-white/5 p-5 rounded-b-2xl rounded-r-2xl h-[100%] overflow-auto scroll-smooth">
       {isError ? (
         <div className="flex justify-center items-center">
           <div className="flex flex-col justify-center items-center text-gray-400 space-y-1">

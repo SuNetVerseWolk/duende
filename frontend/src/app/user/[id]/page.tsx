@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   useProfile,
   useUpdateProfile,
@@ -14,6 +14,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Warn from "@/components/Warn";
 import { supabase, supabaseAdmin } from "@/lib/supabaseClient";
 import { useUserEmail } from "@/hooks/useUserEmail";
+import { useCreateSet } from "@/hooks/useSets";
+import { Sets } from "../../../../generated/prisma";
 
 const Page = () => {
   const queryClient = useQueryClient();
@@ -49,6 +51,28 @@ const Page = () => {
   >(null);
 
   console.log(profile?.id);
+
+  const defaultData = useMemo(() => ({ 
+        privacy: true,
+        name: "Новый набор"
+    } as Sets), []);
+
+    const [data, setData] = useState<Sets>(defaultData);
+    const { mutate, isPending } = useCreateSet();
+
+    const handleSubmit = () => {
+        mutate(data, {
+            onSuccess: () => {
+            setData(defaultData);
+            },
+        });
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === "Enter") {
+            handleSubmit();
+        }
+    };
 
   useEffect(() => {
     if (warnVisible) {
@@ -216,8 +240,16 @@ const Page = () => {
                                     focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 
                                     py-1.5 sm:py-2 px-4 rounded-sm text-sm sm:text-base flex-1 text-center
                                     disabled:opacity-50 disabled:cursor-not-allowed my-2"
+            disabled={isPending}
+            onClick={() => {
+            setData({
+                ...defaultData,
+                name: "Новый набор"
+            });
+            handleSubmit();
+            }}
           >
-            Добавить набор
+            {isPending ? "Добавляется..." : "Добавить набор"}
           </button>
         )}
 
