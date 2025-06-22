@@ -45,7 +45,7 @@ const Page = () => {
                     py-1.5 sm:py-2 px-4 rounded-sm text-sm sm:text-base flex-1 text-center
                     disabled:opacity-50 disabled:cursor-not-allowed my-2"
         >
-          {isAdding ? "Добавление..." : "Добавить набор"}
+          {isAdding ? "Добавление..." : "Добавить карточку"}
         </button>
 
         <div className="flex flex-col bg-white/5 p-5 min-h-50 rounded-2xl overflow-auto">

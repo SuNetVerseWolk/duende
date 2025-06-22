@@ -132,8 +132,8 @@ export default function UserSetItem() {
                 id="closed"
                 name="privacy"
                 className="h-4 w-4"
-                checked={formData.privacy}
-                onChange={() => handleRadioChange(false)}
+                checked={formData.privacy === true}
+                onChange={() => handleRadioChange(true)}
                 disabled={isDisabled}
               />
               <label htmlFor="closed" className="ml-2">
@@ -147,8 +147,8 @@ export default function UserSetItem() {
                 id="global"
                 name="privacy"
                 className="h-4 w-4 ml-0 sm:ml-3"
-                checked={!formData.privacy}
-                onChange={() => handleRadioChange(true)}
+                checked={formData.privacy === false}
+                onChange={() => handleRadioChange(false)}
                 disabled={isDisabled}
               />
               <label htmlFor="global" className="ml-2">
