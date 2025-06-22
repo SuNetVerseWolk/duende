@@ -21,7 +21,7 @@ export class ProfilesService {
       include: {
         Sets: {
           orderBy: {
-            name: 'asc',
+            created_at: 'desc',
           },
           include: {
             Cards: true,
@@ -167,6 +167,9 @@ export class ProfilesService {
         _count: {
           select: { Cards: true },
         },
+      },
+      orderBy: {
+        created_at: 'desc',
       },
     });
 
