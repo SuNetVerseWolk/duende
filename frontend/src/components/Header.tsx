@@ -2,7 +2,8 @@
 import { useProfile, useUser } from "@/hooks/useAuth";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
+import PopUpAddingSets from "./PopUpAddiningSets";
 
 const Header = () => {
   const { data: user, isLoading: userIsLoading } = useUser();
@@ -11,6 +12,7 @@ const Header = () => {
     () => userIsLoading && profileIsLoading,
     [userIsLoading, profileIsLoading]
   );
+  const [openPopUpAdding, setOpenPopUpAdding] = useState(false);
 
   return (
     <header className="flex justify-center items-center pt-10 px-4">
@@ -28,8 +30,13 @@ const Header = () => {
           />
         </div>
 
+        {openPopUpAdding && (
+              <PopUpAddingSets onClose={() => setOpenPopUpAdding(false)} />
+            )}
+
         <div className="flex flex-row-reverse justify-between w-[100%]">
-          <Link href={'/set/0'}
+          <button
+            onClick={() => setOpenPopUpAdding(!openPopUpAdding)}
             className="p-2 font-semibold text-white bg-blue-600 rounded-sm
                         hover:bg-blue-700 transition-colors shadow-md hidden show-on-small
                         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 duration-300"
@@ -39,7 +46,7 @@ const Header = () => {
               src="/plus_2.png"
               alt=""
             />
-          </Link>
+          </button>
           {user ? (
             <Link
               className="cursor-pointer flex flex-row gap-2 items-center rounded-full"
