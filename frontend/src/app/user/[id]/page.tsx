@@ -50,8 +50,6 @@ const Page = () => {
     "signOut" | "deleteAccount" | null
   >(null);
 
-  console.log(profile?.id);
-
   const defaultData = useMemo(() => ({ 
         privacy: true,
         name: "Новый набор"

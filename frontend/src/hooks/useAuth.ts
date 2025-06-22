@@ -63,20 +63,10 @@ export const useMySets = () => {
   });
 };
 
-export const useUserSets = (userId?: string) => {
-  const currentUserId = useUserId();
-
-  if (currentUserId === userId || !userId) {
-    return useQuery({
-      queryKey: ["mySets", userId],
-      queryFn: () => profileApi.getMySets(userId!).then((res) => res.data),
-      enabled: !!userId,
-    });
-  }
-
+export const useUserSets = (userId: string) => {
   return useQuery<SetWithCards[]>({
     queryKey: ["userSets", userId],
-    queryFn: () => profileApi.getUserSets(userId!).then((res) => res.data),
+    queryFn: () => profileApi.getUserSets(userId).then((res) => res.data),
     enabled: !!userId,
   });
 };

@@ -42,7 +42,7 @@ export class ProfilesController {
   }
 
   @Get(':id/sets')
-  getUserSets(@Param('userId') userId: string) {
-    return this.profilesService.getUserSets(userId, false);
+  getUserSets(@Param('id') id) {
+    return this.profilesService.getUserSets(id, false);
   }
 }
