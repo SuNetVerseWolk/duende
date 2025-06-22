@@ -38,7 +38,7 @@ export const useCreateSet = () => {
   const userId = useUserId();
   
   return useMutation({
-    mutationFn: (createSetDto: SetMutationDto) => 
+    mutationFn: (createSetDto: Omit<SetMutationDto, "id" | "created_at">) => 
       setsApi.create(createSetDto, userId!),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['sets'] });

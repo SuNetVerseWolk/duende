@@ -95,7 +95,7 @@ export const profileApi = {
 };
 
 export const setsApi = {
-  create: (createSetDto: Omit<Sets, "id" | "id_profile">, userId: string) =>
+  create: (createSetDto: Omit<Sets, "id" | "id_profile" | "created_at">, userId: string) =>
     api.post<Sets>(`/sets/${userId}`, createSetDto),
   //findAll: () =>
   //  api.get<GroupedSetsResponse>(`/sets`),
