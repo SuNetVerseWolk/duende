@@ -63,12 +63,15 @@ export const useMySets = () => {
 export const useUserSets = (userId?: string) => {
   // If no userId is provided, use the current user's ID
   const currentUserId = useUserId();
-  const targetUserId = userId || currentUserId;
+	
+	if (currentUserId === userId || !userId) {
+		return useMySets;
+	}
   
   return useQuery<SetWithCards[]>({
-    queryKey: ['userSets', targetUserId],
-    queryFn: () => profileApi.getUserSets(targetUserId!).then(res => res.data),
-    enabled: !!targetUserId,
+    queryKey: ['userSets', userId],
+    queryFn: () => profileApi.getUserSets(userId!).then(res => res.data),
+    enabled: !!userId,
   });
 };
 
