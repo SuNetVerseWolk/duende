@@ -1,6 +1,6 @@
 
 "use client";
-import { profileApi } from '@/lib/api';
+import { profileApi, SetWithCards } from '@/lib/api';
 import { supabase } from '@/lib/supabaseClient';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
@@ -60,17 +60,17 @@ export const useMySets = () => {
   });
 };
 
-//export const useUserSets = (userId?: string) => {
-//  // If no userId is provided, use the current user's ID
-//  const currentUserId = useUserId();
-//  const targetUserId = userId || currentUserId;
+export const useUserSets = (userId?: string) => {
+  // If no userId is provided, use the current user's ID
+  const currentUserId = useUserId();
+  const targetUserId = userId || currentUserId;
   
-//  return useQuery({
-//    queryKey: ['userSets', targetUserId],
-//    queryFn: () => profileApi.getUserSets(targetUserId!).then(res => res.data),
-//    enabled: !!targetUserId,
-//  });
-//};
+  return useQuery<SetWithCards[]>({
+    queryKey: ['userSets', targetUserId],
+    queryFn: () => profileApi.getUserSets(targetUserId!).then(res => res.data),
+    enabled: !!targetUserId,
+  });
+};
 
 export const useWholeProfiles = () => {
 	return useQuery({

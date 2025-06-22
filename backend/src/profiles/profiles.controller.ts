@@ -43,8 +43,6 @@ export class ProfilesController {
 
   @Get(':id/sets')
   getUserSets(@Param('userId') userId: string) {
-    return this.profilesService
-      .findById(userId)
-      .then((profile) => this.profilesService.getUserSets(profile.id));
+    return this.profilesService.getUserSets(userId, false);
   }
 }

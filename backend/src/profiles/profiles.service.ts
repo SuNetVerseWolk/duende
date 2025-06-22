@@ -7,11 +7,11 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class ProfilesService {
   private supabase: SupabaseClient;
   constructor(private prisma: PrismaService) {
-		this.supabase = createClient(
+    this.supabase = createClient(
       process.env.SUPABASE_URL!,
       process.env.SUPABASE_ANON_KEY!,
     );
-	}
+  }
 
   async getAllProfiles() {
     const profiles = await this.prisma.profiles.findMany({
@@ -42,8 +42,11 @@ export class ProfilesService {
       Sets: profile.Sets.map((set) => ({
         ...set,
         id: set.id.toString(),
-				id_profile: set.id_profile?.toString(),
-        Cards: set.Cards.map((card) => ({ ...card, id: card.id.toString(), id_set: card.id_set?.toString() })),
+        Cards: set.Cards.map((card) => ({
+          ...card,
+          id: card.id.toString(),
+          id_set: card.id_set?.toString(),
+        })),
       })),
     }));
   }
@@ -71,7 +74,7 @@ export class ProfilesService {
     imageFile?: Express.Multer.File,
   ): Promise<profiles> {
     const existingProfile = await this.findById(id);
-		console.log(typeof updateData, updateData)
+    console.log(typeof updateData, updateData);
 
     let imageUrl = existingProfile.avatar;
 

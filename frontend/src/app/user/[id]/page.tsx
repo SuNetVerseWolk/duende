@@ -5,6 +5,7 @@ import {
   useProfile,
   useUpdateProfile,
   useUser,
+	useUserSets,
 } from "@/hooks/useAuth";
 import { Set } from "@/components/Set";
 import Image from "next/image";
@@ -13,7 +14,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Warn from "@/components/Warn";
 import { supabase, supabaseAdmin } from "@/lib/supabaseClient";
 import { useUserEmail } from "@/hooks/useUserEmail";
-import { useUserSets } from "@/hooks/useSets";
 
 const Page = () => {
   const queryClient = useQueryClient();
