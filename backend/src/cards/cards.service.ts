@@ -70,7 +70,7 @@ export class CardsService {
       throw new ForbiddenException('You do not have access to this card');
     }
 
-    return card;
+    return { ...card, id: card.id.toString(), id_set: card.id_set?.toString()};
   }
 
   async update(id: bigint, updateCardDto: Cards, userId: string) {
@@ -97,9 +97,11 @@ export class CardsService {
       );
     }
 
-    return this.prisma.cards.delete({
+    const data = await this.prisma.cards.delete({
       where: { id },
     });
+
+		return { ...data, id: data.id.toString(), id_set: data.id_set?.toString()}
   }
 
   private async verifySetOwnership(setId: bigint, userId: string) {
