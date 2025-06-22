@@ -93,7 +93,7 @@ export const profileApi = {
   updateMyProfile: updateProfile,
   getMySets: (id: string) => api.get<SetWithCards[]>(`/profiles/me/${id}/sets`),
 	getAllProfiles: () => api.get<WholeProfiles[]>(`/profiles/all`),
-  getUserSets: (userId: string) => api.get<SetWithCards[]>(`/profiles/${userId}/sets`),
+  getUserSets: (userId: string, includePrivate: boolean = false) => api.get<SetWithCards[]>(`/profiles/${userId}/sets?includePrivate=${includePrivate}`),
 };
 
 export const setsApi = {

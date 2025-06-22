@@ -62,7 +62,7 @@ export class ProfilesService {
     });
 
     if (!profile) {
-      throw new NotFoundException('Profile not found');
+      throw new NotFoundException(`profile with ID ${id} not found`);
     }
 
     return profile;
@@ -74,7 +74,7 @@ export class ProfilesService {
     imageFile?: Express.Multer.File,
   ): Promise<profiles> {
     const existingProfile = await this.findById(id);
-    console.log(typeof updateData, updateData);
+    console.log(existingProfile, updateData);
 
     let imageUrl = existingProfile.avatar;
 

@@ -1,12 +1,12 @@
 import {
   Controller,
   Get,
-  Patch,
   Body,
   Param,
-  Req,
   UseInterceptors,
-	UploadedFile,
+  UploadedFile,
+  Put,
+	Query,
 } from '@nestjs/common';
 import { ProfilesService } from './profiles.service';
 import { profiles } from 'generated/prisma';
@@ -26,14 +26,14 @@ export class ProfilesController {
     return this.profilesService.findById(id);
   }
 
-  @Patch('me/:id')
+  @Put('me/:id')
   @UseInterceptors(FileInterceptor('avatar'))
-  updateMyProfile(
+  async updateMyProfile(
     @Param('id') id,
-    @Body() updateProfileDto: profiles,
+    @Body() body: profiles,
     @UploadedFile() avatar?: Express.Multer.File,
   ) {
-    return this.profilesService.updateProfile(id, updateProfileDto, avatar);
+    return this.profilesService.updateProfile(id, body, avatar);
   }
 
   @Get('me/:id/sets')
@@ -42,7 +42,10 @@ export class ProfilesController {
   }
 
   @Get(':id/sets')
-  getUserSets(@Param('id') id) {
-    return this.profilesService.getUserSets(id, false);
+  getUserSets(
+    @Param('id') id,
+    @Query('includePrivate') includePrivate: boolean = false,
+  ) {
+    return this.profilesService.getUserSets(id, includePrivate);
   }
 }
