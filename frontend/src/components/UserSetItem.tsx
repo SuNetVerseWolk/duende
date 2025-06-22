@@ -22,7 +22,7 @@ export default function UserSetItem() {
   } = useSet(id);
 	const isMine = useMemo(() => user?.id === data?.id_profile, [user, data]);
   const isLoading = useMemo(
-    () => !id || setIsLoading || isPaused || isUserLoading || !isMine,
+    () => !id || setIsLoading || isPaused || isUserLoading,
     [id, setIsLoading, isPaused, isUserLoading]
   );
 
@@ -91,7 +91,7 @@ export default function UserSetItem() {
 
   const isSubmitting = updateSetMutation.isPending;
   const isDeleting = deleteSetMutation.isPending;
-  const isDisabled = isLoading || isSubmitting || isDeleting;
+  const isDisabled = isLoading || isSubmitting || isDeleting || !isMine;
 
   if (isLoading || !formData) {
     return (
