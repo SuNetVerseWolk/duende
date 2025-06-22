@@ -6,7 +6,7 @@ import UserSetItem from "@/components/UserSetItem";
 import { useCreateCard, useCardsForSet } from "@/hooks/useCards";
 import { useParams, useRouter } from "next/navigation";
 import { useUser } from "@/hooks/useAuth";
-import { useCreateSet } from "@/hooks/useSets"
+import { useCreateSet, useSet } from "@/hooks/useSets"
 import { toast } from "react-hot-toast";
 
 const Page = () => {
@@ -14,11 +14,12 @@ const Page = () => {
 	const router = useRouter();
   const setId = (params?.id ? params.id : "") as string;
   const { data: user, isLoading: isUserLoading } = useUser();
-  const { data: set, isLoading: isSetLoading, error } = useCardsForSet(setId);
+	const { data: set, isLoading: isSetLoading, error } = useSet(setId);
+  const { data: cards, isLoading: isCardsLoading } = useCardsForSet(setId);
   const isMine = useMemo(() => user?.id === set?.id_profile, [user, set]);
   const isLoading = useMemo(
-    () => isSetLoading || isUserLoading,
-    [isSetLoading, isUserLoading]
+    () => isSetLoading || isUserLoading || isCardsLoading,
+    [isSetLoading, isUserLoading, isCardsLoading]
   );
 
   const createCardMutation = useCreateCard();
@@ -107,10 +108,10 @@ const Page = () => {
             <p className="text-red-500 text-center py-4">
               Ошибка загрузки: {error.message}
             </p>
-          ) : set?.Cards?.length === 0 ? (
+          ) : cards?.length === 0 ? (
             <p className="text-gray-400 text-center py-4">Пусто</p>
           ) : (
-            set?.Cards?.map((card) => (
+            cards?.map((card) => (
               <Card key={card.id.toString()} {...card} />
             ))
           )}

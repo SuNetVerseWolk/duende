@@ -6,7 +6,7 @@ export const useCardsForSet = (setId: string) => {
   const userId = useUserId();
 
   return useQuery({
-    queryKey: ['set', setId],
+    queryKey: ['set', setId, 'cards'],
     queryFn: () => cardsApi.findAllForSet(setId, userId!).then(res => res.data),
     enabled: !!setId && !!userId,
   });
@@ -30,7 +30,7 @@ export const useCreateCard = () => {
     mutationFn: (createCardDto: Omit<Cards, "id" | "created_at">) => cardsApi.create(userId!, createCardDto),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
-        queryKey: ['set', variables.id_set],
+        queryKey: ['set', variables.id_set, 'cards'],
       });
     },
   });
