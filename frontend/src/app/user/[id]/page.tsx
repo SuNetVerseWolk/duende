@@ -5,7 +5,7 @@ import {
   useProfile,
   useUpdateProfile,
   useUser,
-	useUserSets,
+  useUserSets,
 } from "@/hooks/useAuth";
 import { Set } from "@/components/Set";
 import Image from "next/image";
@@ -21,9 +21,7 @@ const Page = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const { data: user, isLoading: userIsLoading } = useUser();
-  //   const { data: profile, isLoading: profileIsLoading } = useProfile();
   const { mutate: updateProfile } = useUpdateProfile();
-  // const { data: mySets, isLoading, isError, error, refetch } = useMySets();
 
   const params = useParams();
   const userId = params?.id as string;
@@ -33,9 +31,10 @@ const Page = () => {
     error,
     isLoading: isloadingSet,
     refetch,
-  } = useUserSets(userId);
+  } = useUserSets(userId, userId == user?.id);
 
   const { data: profile, isLoading: profileIsLoading } = useProfile(userId);
+  const [name, setName] = useState("");
 
   const {
     data: email,
@@ -50,27 +49,25 @@ const Page = () => {
     "signOut" | "deleteAccount" | null
   >(null);
 
-  const defaultData = useMemo(() => ({ 
+  const defaultData = useMemo(
+    () =>
+      ({
         privacy: true,
-        name: "Новый набор"
-    } as Sets), []);
+        name: "Новый набор",
+      } as Sets),
+    []
+  );
 
-    const [data, setData] = useState<Sets>(defaultData);
-    const { mutate, isPending } = useCreateSet();
+  const [data, setData] = useState<Sets>(defaultData);
+  const { mutate, isPending } = useCreateSet();
 
-    const handleSubmit = () => {
-        mutate(data, {
-            onSuccess: () => {
-            setData(defaultData);
-            },
-        });
-    };
-
-    const handleKeyDown = (e: React.KeyboardEvent) => {
-        if (e.key === "Enter") {
-            handleSubmit();
-        }
-    };
+  const handleAddCard = () => {
+    mutate(data, {
+      onSuccess: () => {
+        setData(defaultData);
+      },
+    });
+  };
 
   useEffect(() => {
     if (warnVisible) {
@@ -83,6 +80,12 @@ const Page = () => {
       document.body.style.overflow = "";
     };
   }, [warnVisible]);
+
+	useEffect(() => {
+    if (profile?.name) {
+      setName(profile.name);
+    }
+  }, [profile?.name]);
 
   const { mutate: signOut } = useMutation({
     mutationFn: async () => await supabase.auth.signOut(),
@@ -130,14 +133,21 @@ const Page = () => {
       setSelectedImage(e.target.files[0]);
       updateProfile(
         {
-          id: user!.id,
-          data: {},
           avatar: e.target.files[0],
         },
         {
           onSuccess: () => setSelectedImage(null),
         }
       );
+    }
+  };
+
+	const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (name !== profile?.name) {
+      updateProfile({
+        name,
+      });
     }
   };
 
@@ -148,7 +158,10 @@ const Page = () => {
       )}
 
       <div className="w-lg h-full">
-        <form className="flex flex-row flex-wrap justify-center max-w-2xl mx-auto gap-3 sm:gap-4 bg-white/5 p-4 sm:p-5 md:p-6 rounded-2xl my-4 sm:my-5">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-row flex-wrap justify-center max-w-2xl mx-auto gap-3 sm:gap-4 bg-white/5 p-4 sm:p-5 md:p-6 rounded-2xl my-4 sm:my-5"
+        >
           <div className="relative w-10 h-10">
             <Image
               className={`w-full filter rounded-full ${
@@ -187,9 +200,9 @@ const Page = () => {
                                         focus:border-white focus:ring-2 focus:ring-white focus:outline-none
                                         transition-colors duration-300 placeholder-gray-400 text-sm sm:text-base"
               placeholder={profileIsLoading ? "Загрузка..." : "Имя"}
-              defaultValue={profile?.name ? profile.name : "Без имени"}
+              value={name || (profile?.name ? profile.name : "Без имени")}
+              onChange={(e) => setName(e.target.value)}
               maxLength={500}
-							onKeyDown={handleKeyDown}
               disabled={user?.id !== profile?.id}
             />
 
@@ -241,11 +254,11 @@ const Page = () => {
                                     disabled:opacity-50 disabled:cursor-not-allowed my-2"
             disabled={isPending}
             onClick={() => {
-            setData({
+              setData({
                 ...defaultData,
-                name: "Новый набор"
-            });
-            handleSubmit();
+                name: "Новый набор",
+              });
+              handleAddCard();
             }}
           >
             {isPending ? "Добавляется..." : "Добавить набор"}
@@ -275,10 +288,7 @@ const Page = () => {
           ) : (
             <div className="w-full grid grid-cols-1 gap-2">
               {userSets?.map((el) => (
-                <Set
-                  key={el.id}
-                  {...el}
-                />
+                <Set key={el.id} {...el} />
               ))}
             </div>
           )}
