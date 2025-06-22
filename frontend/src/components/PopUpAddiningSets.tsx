@@ -30,7 +30,7 @@ export default function PopUpAddingSets({
   };
 
   return (
-    <div className="relative m-3 p-5 bg-gray-900 border border-gray-700 rounded-lg text-white shadow-lg w-80">
+    <div className="absolute location_popUp m-3 p-5 bg-gray-900 border border-gray-700 rounded-lg text-white shadow-lg w-80">
       <h2 className="text-xl font-bold mb-4">Создание набора</h2>
       
       <div className="mb-4">
