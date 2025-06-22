@@ -70,7 +70,7 @@ const Page = () => {
       }
       
       toast.success("Set copied successfully");
-			router.replace(`/sets/${newSet.data.id}`);
+			router.replace(`/set/${newSet.data.id}`);
     } catch (e) {
       console.error("Error copying set", e);
       toast.error("Failed to copy set");
