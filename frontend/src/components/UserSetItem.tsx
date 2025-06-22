@@ -91,7 +91,7 @@ export default function UserSetItem() {
 
   const isSubmitting = updateSetMutation.isPending;
   const isDeleting = deleteSetMutation.isPending;
-  const isDisabled = isLoading || isSubmitting || isDeleting || !isMine;
+  const isDisabled = !isMine || isLoading || isSubmitting || isDeleting;
 
   if (isLoading || !formData) {
     return (
