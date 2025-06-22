@@ -1,5 +1,6 @@
 "use client";
 
+import { useUser } from "@/hooks/useAuth";
 import { useDeleteSet, useSet, useUpdateSet } from "@/hooks/useSets";
 import { SetWithCards } from "@/lib/api";
 import { useParams, useRouter } from "next/navigation";
@@ -10,11 +11,18 @@ export default function UserSetItem() {
   const router = useRouter();
   const params = useParams();
   const id = params?.id as string;
-  
-  const { data, isLoading: setIsLoading, isPaused, isError, error } = useSet(id);
+  const { data: user, isLoading: isUserLoading } = useUser();
+
+  const {
+    data,
+    isLoading: setIsLoading,
+    isPaused,
+    isError,
+    error,
+  } = useSet(id);
   const isLoading = useMemo(
-    () => !id || setIsLoading || isPaused,
-    [id, setIsLoading, isPaused]
+    () => !id || setIsLoading || isPaused || isUserLoading,
+    [id, setIsLoading, isPaused, isUserLoading]
   );
 
   const updateSetMutation = useUpdateSet();
@@ -30,14 +38,14 @@ export default function UserSetItem() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => {
+    setFormData((prev) => {
       if (!prev) return undefined;
       return { ...prev, [name]: value };
     });
   };
 
   const handleRadioChange = (privacy: boolean) => {
-    setFormData(prev => {
+    setFormData((prev) => {
       if (!prev) return undefined;
       return { ...prev, privacy };
     });
@@ -45,17 +53,17 @@ export default function UserSetItem() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData?.id) return;
 
     try {
-      await updateSetMutation.mutateAsync({ 
-        id: formData.id, 
+      await updateSetMutation.mutateAsync({
+        id: formData.id,
         data: {
           name: formData.name,
           description: formData.description,
-          privacy: formData.privacy
-        }
+          privacy: formData.privacy,
+        },
       });
 
       toast.success("Набор успешно обновлен");
@@ -85,10 +93,18 @@ export default function UserSetItem() {
   const isDisabled = isLoading || isSubmitting || isDeleting;
 
   if (isLoading || !formData) {
-    return <div className="text-white flex flex-col gap-3 sm:gap-4 bg-white/5 p-4 sm:p-5 md:p-6 rounded-2xl my-4 sm:my-5">Загружается...</div>;
+    return (
+      <div className="text-white flex flex-col gap-3 sm:gap-4 bg-white/5 p-4 sm:p-5 md:p-6 rounded-2xl my-4 sm:my-5">
+        Загружается...
+      </div>
+    );
   }
-	if (isError) {
-    return <div className="text-white flex flex-col gap-3 sm:gap-4 bg-white/5 p-4 sm:p-5 md:p-6 rounded-2xl my-4 sm:my-5">{error.message}	</div>;
+  if (isError) {
+    return (
+      <div className="text-white flex flex-col gap-3 sm:gap-4 bg-white/5 p-4 sm:p-5 md:p-6 rounded-2xl my-4 sm:my-5">
+        {error.message}{" "}
+      </div>
+    );
   }
 
   return (
@@ -158,31 +174,33 @@ export default function UserSetItem() {
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-1">
-          <button
-            type="submit"
-            className="text-white font-semibold bg-blue-600 hover:bg-blue-700 
+        {user?.id === data?.id_profile && (
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-1">
+            <button
+              type="submit"
+              className="text-white font-semibold bg-blue-600 hover:bg-blue-700 
                       transition-colors duration-300 shadow-md focus:outline-none 
                       focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 
                       py-1.5 sm:py-2 px-4 rounded-sm text-sm sm:text-base flex-1 text-center
                       disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={isDisabled}
-          >
-            {isSubmitting ? "Сохранение..." : "Сохранить"}
-          </button>
-          <button
-            type="button"
-            onClick={handleDelete}
-            className="text-white font-semibold bg-red-600 hover:bg-red-700 
+              disabled={isDisabled}
+            >
+              {isSubmitting ? "Сохранение..." : "Сохранить"}
+            </button>
+            <button
+              type="button"
+              onClick={handleDelete}
+              className="text-white font-semibold bg-red-600 hover:bg-red-700 
                       transition-colors duration-300 shadow-md focus:outline-none 
                       focus:ring-2 focus:ring-red-500 focus:ring-offset-2 
                       py-1.5 sm:py-2 px-4 rounded-sm text-sm sm:text-base flex-1 text-center
                       disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={isDisabled}
-          >
-            {isDeleting ? "Удаление..." : "Удалить"}
-          </button>
-        </div>
+              disabled={isDisabled}
+            >
+              {isDeleting ? "Удаление..." : "Удалить"}
+            </button>
+          </div>
+        )}
       </div>
     </form>
   );
