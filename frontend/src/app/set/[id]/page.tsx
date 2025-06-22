@@ -4,13 +4,14 @@ import React, { useMemo, useState } from "react";
 import Card from "@/components/Card";
 import UserSetItem from "@/components/UserSetItem";
 import { useCreateCard, useCardsForSet } from "@/hooks/useCards";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useUser } from "@/hooks/useAuth";
 import { useCreateSet } from "@/hooks/useSets"
 import { toast } from "react-hot-toast";
 
 const Page = () => {
   const params = useParams();
+	const router = useRouter();
   const setId = (params?.id ? params.id : "") as string;
   const { data: user, isLoading: isUserLoading } = useUser();
   const { data: set, isLoading: isSetLoading, error } = useCardsForSet(setId);
@@ -69,6 +70,7 @@ const Page = () => {
       }
       
       toast.success("Set copied successfully");
+			router.replace(`/sets/${set.id}`);
     } catch (e) {
       console.error("Error copying set", e);
       toast.error("Failed to copy set");
