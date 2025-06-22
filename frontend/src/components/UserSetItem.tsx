@@ -82,7 +82,7 @@ export default function UserSetItem() {
     try {
       await deleteSetMutation.mutateAsync(formData.id);
       toast.success("Набор успешно удален");
-      router.push("/sets");
+      router.back();
     } catch (error) {
       toast.error("Ошибка при удалении набора");
       console.error("Delete error:", error);

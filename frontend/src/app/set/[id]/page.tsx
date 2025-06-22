@@ -6,8 +6,7 @@ import UserSetItem from "@/components/UserSetItem";
 import { useCreateCard, useCardsForSet } from "@/hooks/useCards";
 import { useParams } from "next/navigation";
 import { useUser } from "@/hooks/useAuth";
-import { useCreateSet } from "@/hooks/useSets";
-import { Sets } from "../../../../generated/prisma";
+import { useCreateSet } from "@/hooks/useSets"
 import { toast } from "react-hot-toast";
 
 const Page = () => {
