@@ -23,7 +23,7 @@ export class CardsService {
       },
     });
 
-    return { ...card, id_set: card.id_set?.toString() };
+    return { ...card, id: card.id.toString(), id_set: card.id_set?.toString() };
   }
 
   async findAllForSet(setId: bigint, userId?: string) {
