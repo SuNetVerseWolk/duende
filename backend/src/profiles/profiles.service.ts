@@ -160,6 +160,7 @@ export class ProfilesService {
     if (!includePrivate) {
       where.privacy = false;
     }
+		console.log(where)
 
     const sets = await this.prisma.sets.findMany({
       where,
