@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Cards, profiles, Sets } from "../../generated/prisma";
+import { profiles, Sets } from "../../generated/prisma";
 import { supabase } from "./supabaseClient";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3000";
@@ -80,11 +80,13 @@ export type WholeProfiles = profiles & {
 	_count: { Sets: number },
 	Sets: SetWithCards[]
 }
-//export type GroupedSetsResponse = Array<{
-//  profileId: string;
-//  profileName: string;
-//  sets: Array<SetWithCount>;
-//}>;
+export type Cards = {
+    id: string; // was bigint
+    created_at: Date;
+    text: string | null;
+    translation: string | null;
+    id_set: string | null; // was bigint | null
+}
 
 export const profileApi = {
   getMyProfile: (id: string) => api.get<profiles>(`/profiles/me/${id}`),
@@ -119,9 +121,9 @@ export const cardsApi = {
     api.get<SetWithCards>(`/cards/set/${setId}/by/${userId}`),
   findOne: (id: bigint, userId: string) =>
     api.get<Cards>(`/cards/${id}/by/${userId}`),
-  update: (id: bigint, userId: string, updateCardDto: Omit<Cards, 'id' | 'created_at'>) =>
+  update: (id: string, userId: string, updateCardDto: Omit<Cards, 'id' | 'created_at'>) =>
     api.patch(`/cards/${id}/by/${userId}`, updateCardDto),
-  remove: (id: bigint, userId: string) =>
+  remove: (id: string, userId: string) =>
     api.delete(`/cards/${id}/by/${userId}`),
 };
 

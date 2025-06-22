@@ -30,7 +30,7 @@ const Page = () => {
     setIsAdding(true);
     try {
       await createCardMutation.mutateAsync({
-        id_set: BigInt(setId),
+        id_set: setId,
         text: "",
         translation: "",
       });
@@ -61,7 +61,7 @@ const Page = () => {
         await Promise.all(
           set.Cards.map((card) =>
             createCardMutation.mutateAsync({
-              id_set: BigInt(newSet.data.id),
+              id_set: newSet.data.id.toString(),
               text: card.text,
               translation: card.translation,
             })

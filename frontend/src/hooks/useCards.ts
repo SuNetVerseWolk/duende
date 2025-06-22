@@ -1,7 +1,6 @@
-import { cardsApi } from '@/lib/api';
+import { Cards, cardsApi } from '@/lib/api';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useUserId } from './useAuth';
-import { Cards } from '../../generated/prisma';
 
 export const useCardsForSet = (setId: string) => {
   const userId = useUserId();
@@ -37,7 +36,7 @@ export const useCreateCard = () => {
   });
 };
 
-export const useUpdateCard = (id: bigint) => {
+export const useUpdateCard = (id: string) => {
   const queryClient = useQueryClient();
 	const userId = useUserId();
   
@@ -55,7 +54,7 @@ export const useUpdateCard = (id: bigint) => {
   });
 };
 
-export const useDeleteCard = (id: bigint) => {
+export const useDeleteCard = (id: string) => {
   const queryClient = useQueryClient();
 	const userId = useUserId();
   

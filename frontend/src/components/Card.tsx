@@ -1,7 +1,7 @@
 "use client";
 import { ChangeEvent, useState } from "react";
-import { Cards } from "../../generated/prisma";
 import { useDeleteCard, useUpdateCard } from "@/hooks/useCards";
+import { Cards } from "@/lib/api";
 
 const Card: React.FC<Cards> = ({ ...params }) => {
   const [card, setCard] = useState<Omit<Cards, "id" | "created_at">>({
